@@ -14,12 +14,17 @@ Update contact targets in `index.html`:
 - Navbar links: edit anchors in each HTML file (keep Services/Timeline URLs consistent)
 
 ## Particle Engine (script.js)
-- Single canvas particle field (monochrome steel/grey)
-- Caps: 120 particles desktop, ~70 mobile; DPR clamped to 1.5
-- Mouse influences drift/parallax; near-cursor connection lines only
-- Resize debounced; pauses on tab hidden
+- Single canvas particle field (monochrome steel/grey) with near/far layers
+- Caps: ~95 particles desktop, ~55 mobile; DPR clamped to 1.5
+- Mouse adds subtle drift; near-cursor connection lines only with limits
+- Resize debounced; pauses on tab hidden; wraps edges with clamped velocity
 - `prefers-reduced-motion`: renders one static frame and stops parallax/reveal
 - Tune count via `maxParticles`, influence via radii in `InfrastructureCanvas`
+
+### Tuning
+- Particle count: `maxParticles` (desktop ~95, mobile ~55)
+- Link radius: `linkDistance` (desktop 140px, mobile 90px)
+- Intensity: lower `maxParticles`, `linkDistance`, or per-particle alpha if you want a calmer field
 
 ## Timeline Console
 - Logs expand/collapse, filters, jumps, focus mode

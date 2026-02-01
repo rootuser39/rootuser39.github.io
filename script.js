@@ -14,59 +14,66 @@
             if (!this.canvas) return;
             
             this.ctx = this.canvas.getContext('2d', { alpha: true });
-            this.width = 0;
-            this.height = 0;
             this.mouse = { x: 0, y: 0, targetX: 0, targetY: 0 };
             this.isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
             this.isRunning = !this.isReducedMotion;
-            this.isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-            this.maxParticles = this.isMobile ? 70 : 120;
+            this.isCoarse = window.matchMedia('(pointer: coarse)').matches;
             this.dpr = Math.min(window.devicePixelRatio || 1, 1.5);
-            this.particles = [];
+            this.maxLines = 120;
+            this.linkDistance = this.isCoarse ? 90 : 140;
+            this.maxParticles = this.isCoarse ? 55 : 95;
+            this.layers = [];
             this.lines = [];
+            this.rafId = null;
             this.resizeTimeout = null;
             
             this.init();
         }
         
         init() {
-            this.resize();
+            this.setSize();
             this.createParticles();
             
-            if (!this.isReducedMotion) {
-                this.setupEventListeners();
-                this.animate();
-            } else {
+            if (this.isReducedMotion) {
                 this.drawStaticFrame();
+                return;
             }
+            
+            this.setupEventListeners();
+            this.animate();
         }
         
-        resize() {
+        setSize() {
+            this.dpr = Math.min(window.devicePixelRatio || 1, 1.5);
             this.width = window.innerWidth;
             this.height = window.innerHeight;
-            this.canvas.width = this.width * this.dpr;
-            this.canvas.height = this.height * this.dpr;
+            this.canvas.width = Math.floor(this.width * this.dpr);
+            this.canvas.height = Math.floor(this.height * this.dpr);
             this.canvas.style.width = `${this.width}px`;
             this.canvas.style.height = `${this.height}px`;
-            this.ctx.scale(this.dpr, this.dpr);
-            if (!this.isReducedMotion) {
-                this.createParticles();
-            }
+            this.ctx.setTransform(this.dpr, 0, 0, this.dpr, 0, 0);
         }
         
         createParticles() {
-            this.particles = [];
-            const count = this.maxParticles;
-            for (let i = 0; i < count; i++) {
-                this.particles.push({
-                    x: Math.random() * this.width,
-                    y: Math.random() * this.height,
-                    vx: (Math.random() - 0.5) * 0.4,
-                    vy: (Math.random() - 0.5) * 0.4,
-                    size: Math.random() * 1.4 + 0.6,
-                    alpha: Math.random() * 0.25 + 0.35
-                });
-            }
+            this.layers = [];
+            const total = this.maxParticles;
+            const nearCount = Math.round(total * 0.6);
+            const farCount = total - nearCount;
+            const maxVel = this.isCoarse ? 0.25 : 0.35;
+            
+            const makeParticle = (depth, alphaScale) => ({
+                x: Math.random() * this.width,
+                y: Math.random() * this.height,
+                vx: (Math.random() - 0.5) * maxVel,
+                vy: (Math.random() - 0.5) * maxVel,
+                size: Math.random() * (depth === 1 ? 1.5 : 1.2) + 0.5,
+                alpha: (Math.random() * 0.25 + 0.18) * alphaScale,
+                depth
+            });
+            
+            const farLayer = Array.from({ length: farCount }, () => makeParticle(0.55, 0.7));
+            const nearLayer = Array.from({ length: nearCount }, () => makeParticle(1, 1));
+            this.layers.push(farLayer, nearLayer);
         }
         
         setupEventListeners() {
@@ -77,72 +84,96 @@
             
             window.addEventListener('resize', () => {
                 clearTimeout(this.resizeTimeout);
-                this.resizeTimeout = setTimeout(() => this.resize(), 200);
+                this.resizeTimeout = setTimeout(() => {
+                    this.setSize();
+                    this.createParticles();
+                }, 180);
             });
             
             document.addEventListener('visibilitychange', () => {
-                this.isRunning = document.visibilityState === 'visible' && !this.isReducedMotion;
-                if (this.isRunning) this.animate();
+                const shouldRun = document.visibilityState === 'visible' && !this.isReducedMotion;
+                this.isRunning = shouldRun;
+                if (shouldRun) {
+                    this.animate();
+                } else if (this.rafId) {
+                    cancelAnimationFrame(this.rafId);
+                }
             });
         }
         
         lerpMouse() {
-            const factor = 0.08;
+            const factor = 0.06;
             this.mouse.x += (this.mouse.targetX - this.mouse.x) * factor;
             this.mouse.y += (this.mouse.targetY - this.mouse.y) * factor;
         }
         
+        clampVelocity(value, limit) {
+            if (value > limit) return limit;
+            if (value < -limit) return -limit;
+            return value;
+        }
+        
         updateParticles() {
-            const influenceRadius = 200;
-            const parallax = 0.02;
+            const influenceRadius = this.isCoarse ? 140 : 200;
+            const parallax = 0.015;
             this.lines = [];
             
-            for (let i = 0; i < this.particles.length; i++) {
-                const p = this.particles[i];
-                const dx = this.mouse.x - p.x;
-                const dy = this.mouse.y - p.y;
-                const dist = Math.sqrt(dx * dx + dy * dy) || 1;
-                
-                // subtle pull toward/away based on mouse
-                const influence = Math.max(0, influenceRadius - dist) / influenceRadius;
-                p.vx += (dx / dist) * influence * 0.02;
-                p.vy += (dy / dist) * influence * 0.02;
-                
-                // drift damping
-                p.vx *= 0.98;
-                p.vy *= 0.98;
-                
-                // base drift
-                p.x += p.vx + parallax * dx;
-                p.y += p.vy + parallax * dy;
-                
-                // wrap edges
-                if (p.x < -10) p.x = this.width + 10;
-                if (p.x > this.width + 10) p.x = -10;
-                if (p.y < -10) p.y = this.height + 10;
-                if (p.y > this.height + 10) p.y = -10;
+            const maxVel = this.isCoarse ? 0.25 : 0.35;
+            const lineCap = this.maxLines;
+            
+            for (const layer of this.layers) {
+                for (let i = 0; i < layer.length; i++) {
+                    const p = layer[i];
+                    const dx = this.mouse.x - p.x;
+                    const dy = this.mouse.y - p.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+                    const influence = Math.max(0, influenceRadius - dist) / influenceRadius;
+                    
+                    p.vx += (dx / dist) * influence * 0.01 * p.depth;
+                    p.vy += (dy / dist) * influence * 0.01 * p.depth;
+                    
+                    p.vx = this.clampVelocity(p.vx * 0.985, maxVel);
+                    p.vy = this.clampVelocity(p.vy * 0.985, maxVel);
+                    
+                    p.x += p.vx + parallax * dx * p.depth;
+                    p.y += p.vy + parallax * dy * p.depth;
+                    
+                    if (p.x < 0) p.x = this.width;
+                    if (p.x > this.width) p.x = 0;
+                    if (p.y < 0) p.y = this.height;
+                    if (p.y > this.height) p.y = 0;
+                }
             }
             
-            // build near-cursor connections
-            const lineRadius = 160;
-            for (let i = 0; i < this.particles.length; i++) {
-                for (let j = i + 1; j < this.particles.length; j++) {
-                    const a = this.particles[i];
-                    const b = this.particles[j];
+            const linkDist = this.linkDistance;
+            const mouseRadius = linkDist;
+            const flat = this.layers.flat();
+            
+            for (let i = 0; i < flat.length; i++) {
+                if (this.lines.length >= lineCap) break;
+                for (let j = i + 1; j < flat.length; j++) {
+                    if (this.lines.length >= lineCap) break;
+                    const a = flat[i];
+                    const b = flat[j];
                     const dx = a.x - b.x;
                     const dy = a.y - b.y;
                     const dist = Math.sqrt(dx * dx + dy * dy);
-                    const mouseDx = (a.x + b.x) / 2 - this.mouse.x;
-                    const mouseDy = (a.y + b.y) / 2 - this.mouse.y;
+                    if (dist > linkDist) continue;
+                    
+                    const midX = (a.x + b.x) * 0.5;
+                    const midY = (a.y + b.y) * 0.5;
+                    const mouseDx = midX - this.mouse.x;
+                    const mouseDy = midY - this.mouse.y;
                     const mouseDist = Math.sqrt(mouseDx * mouseDx + mouseDy * mouseDy);
                     
-                    if (dist < lineRadius && mouseDist < influenceRadius) {
-                        this.lines.push({
-                            x1: a.x, y1: a.y,
-                            x2: b.x, y2: b.y,
-                            alpha: (1 - dist / lineRadius) * 0.15
-                        });
-                    }
+                    if (mouseDist > mouseRadius) continue;
+                    
+                    const alpha = (1 - dist / linkDist) * 0.12 * Math.min(a.depth, b.depth);
+                    this.lines.push({
+                        x1: a.x, y1: a.y,
+                        x2: b.x, y2: b.y,
+                        alpha
+                    });
                 }
             }
         }
@@ -151,7 +182,7 @@
             this.ctx.clearRect(0, 0, this.width, this.height);
             this.ctx.fillStyle = '#E7E9EE';
             
-            this.lines.forEach(line => {
+            for (const line of this.lines) {
                 this.ctx.save();
                 this.ctx.strokeStyle = `rgba(231,233,238,${line.alpha})`;
                 this.ctx.lineWidth = 1;
@@ -160,29 +191,31 @@
                 this.ctx.lineTo(line.x2, line.y2);
                 this.ctx.stroke();
                 this.ctx.restore();
-            });
+            }
             
-            this.particles.forEach(p => {
-                this.ctx.save();
-                this.ctx.globalAlpha = p.alpha * 0.6;
-                this.ctx.beginPath();
-                this.ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-                this.ctx.fill();
-                this.ctx.restore();
-            });
+            for (const layer of this.layers) {
+                for (const p of layer) {
+                    this.ctx.save();
+                    this.ctx.globalAlpha = p.alpha * 0.55;
+                    this.ctx.beginPath();
+                    this.ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                    this.ctx.fill();
+                    this.ctx.restore();
+                }
+            }
         }
         
         drawStaticFrame() {
+            this.setSize();
+            this.createParticles();
             this.ctx.clearRect(0, 0, this.width, this.height);
-            for (let i = 0; i < 30; i++) {
-                const x = Math.random() * this.width;
-                const y = Math.random() * this.height;
-                const size = Math.random() * 1.4 + 0.6;
-                const alpha = Math.random() * 0.25 + 0.35;
+            const flat = this.layers.flat();
+            for (let i = 0; i < Math.min(35, flat.length); i++) {
+                const p = flat[i];
                 this.ctx.save();
-                this.ctx.globalAlpha = alpha * 0.6;
+                this.ctx.globalAlpha = p.alpha * 0.5;
                 this.ctx.beginPath();
-                this.ctx.arc(x, y, size, 0, Math.PI * 2);
+                this.ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
                 this.ctx.fillStyle = '#E7E9EE';
                 this.ctx.fill();
                 this.ctx.restore();
@@ -194,7 +227,7 @@
             this.lerpMouse();
             this.updateParticles();
             this.draw();
-            requestAnimationFrame(() => this.animate());
+            this.rafId = requestAnimationFrame(() => this.animate());
         }
     }
     
