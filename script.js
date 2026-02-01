@@ -23,6 +23,7 @@
             this.linkDistance = this.isCoarse ? 90 : 140;
             this.maxParticles = this.isCoarse ? 55 : 95;
             this.layers = [];
+            this.lines = [];
             this.rafId = null;
             this.resizeTimeout = null;
             
@@ -208,7 +209,6 @@
             this.setSize();
             this.createParticles();
             this.ctx.clearRect(0, 0, this.width, this.height);
-            this.ctx.fillStyle = '#E7E9EE';
             const flat = this.layers.flat();
             for (let i = 0; i < Math.min(35, flat.length); i++) {
                 const p = flat[i];
@@ -216,6 +216,7 @@
                 this.ctx.globalAlpha = p.alpha * 0.5;
                 this.ctx.beginPath();
                 this.ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                this.ctx.fillStyle = '#E7E9EE';
                 this.ctx.fill();
                 this.ctx.restore();
             }
