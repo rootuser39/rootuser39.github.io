@@ -5,6 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Timeline | Rishabh Durugkar</title>
     <meta name="description" content="Professional timeline and career progression.">
+    <meta property="og:title" content="Timeline | Rishabh Durugkar">
+    <meta property="og:description" content="Key milestones across infrastructure, networking, and security work.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://rishabhdurugkar.me/timeline.html">
+    <meta property="og:image" content="https://rishabhdurugkar.me/og.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Timeline | Rishabh Durugkar">
+    <meta name="twitter:description" content="Key milestones across infrastructure, networking, and security work.">
+    <meta name="twitter:image" content="https://rishabhdurugkar.me/og.png">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body class="timeline-page">
@@ -12,16 +21,22 @@
 
     <nav id="mainNav" class="navbar">
         <div class="nav-container">
-            <a href="index.html" class="nav-brand">Rishabh Durugkar</a>
-            <ul class="nav-links">
-                <li><a href="index.html" class="nav-link">Home</a></li>
+            <a href="index.html#home" class="nav-brand">Rishabh Durugkar</a>
+            <button id="navToggle" class="nav-toggle" aria-expanded="false" aria-controls="primaryNavigation" aria-label="Toggle navigation">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-links" id="primaryNavigation">
+                <li><a href="index.html#home" class="nav-link">Home</a></li>
+                <li><a href="services.html" class="nav-link">Services</a></li>
                 <li><a href="timeline.html" class="nav-link active">Timeline</a></li>
             </ul>
         </div>
     </nav>
 
     <main class="timeline-main">
-        <aside class="command-panel">
+        <aside class="command-panel" aria-label="Console controls">
             <div class="panel-header">
                 <h2 class="panel-title">Command Console</h2>
                 <div class="panel-status">
