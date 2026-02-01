@@ -20,25 +20,23 @@
             this.isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
             this.isRunning = !this.isReducedMotion;
             this.isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-            
-            // Particles and elements
-            this.gridTiles = [];
-            this.networkNodes = [];
-            this.radarRings = [];
-            this.maxParticles = 120;
+            this.maxParticles = this.isMobile ? 70 : 120;
+            this.dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+            this.particles = [];
+            this.lines = [];
+            this.resizeTimeout = null;
             
             this.init();
         }
         
         init() {
             this.resize();
-            this.createElements();
+            this.createParticles();
             
             if (!this.isReducedMotion) {
                 this.setupEventListeners();
                 this.animate();
             } else {
-                // Draw one static frame
                 this.drawStaticFrame();
             }
         }
@@ -46,274 +44,156 @@
         resize() {
             this.width = window.innerWidth;
             this.height = window.innerHeight;
-            this.canvas.width = this.width;
-            this.canvas.height = this.height;
-            
-            // Recreate elements on resize
+            this.canvas.width = this.width * this.dpr;
+            this.canvas.height = this.height * this.dpr;
+            this.canvas.style.width = `${this.width}px`;
+            this.canvas.style.height = `${this.height}px`;
+            this.ctx.scale(this.dpr, this.dpr);
             if (!this.isReducedMotion) {
-                this.createElements();
+                this.createParticles();
             }
         }
         
-        createElements() {
-            // GPU/Compute: Grid tiles
-            this.gridTiles = [];
-            const tileSize = 80;
-            const tilesX = Math.ceil(this.width / tileSize);
-            const tilesY = Math.ceil(this.height / tileSize);
-            
-            for (let i = 0; i < tilesX; i++) {
-                for (let j = 0; j < tilesY; j++) {
-                    if (Math.random() > 0.7) { // Sparse grid
-                        this.gridTiles.push({
-                            x: i * tileSize,
-                            y: j * tileSize,
-                            size: tileSize,
-                            opacity: Math.random() * 0.15 + 0.05,
-                            shimmer: Math.random() * Math.PI * 2
-                        });
-                    }
-                }
-            }
-            
-            // Networking: Network nodes
-            this.networkNodes = [];
-            const nodeCount = Math.min(Math.floor(this.maxParticles * 0.3), 25);
-            for (let i = 0; i < nodeCount; i++) {
-                this.networkNodes.push({
+        createParticles() {
+            this.particles = [];
+            const count = this.maxParticles;
+            for (let i = 0; i < count; i++) {
+                this.particles.push({
                     x: Math.random() * this.width,
                     y: Math.random() * this.height,
-                    vx: (Math.random() - 0.5) * 0.3,
-                    vy: (Math.random() - 0.5) * 0.3,
-                    radius: 2 + Math.random() * 2,
-                    opacity: 0.3 + Math.random() * 0.3,
-                    pulsePhase: Math.random() * Math.PI * 2
-                });
-            }
-            
-            // Security: Radar rings
-            this.radarRings = [];
-            const ringCount = Math.min(Math.floor(this.maxParticles * 0.15), 8);
-            for (let i = 0; i < ringCount; i++) {
-                this.radarRings.push({
-                    x: Math.random() * this.width,
-                    y: Math.random() * this.height,
-                    radius: 0,
-                    maxRadius: 100 + Math.random() * 150,
-                    speed: 0.5 + Math.random() * 0.5,
-                    opacity: 0.2
+                    vx: (Math.random() - 0.5) * 0.4,
+                    vy: (Math.random() - 0.5) * 0.4,
+                    size: Math.random() * 1.4 + 0.6,
+                    alpha: Math.random() * 0.25 + 0.35
                 });
             }
         }
         
         setupEventListeners() {
-            // Mouse tracking with lerp
             window.addEventListener('mousemove', (e) => {
                 this.mouse.targetX = e.clientX;
                 this.mouse.targetY = e.clientY;
             });
             
-            // Debounced resize
-            let resizeTimeout;
             window.addEventListener('resize', () => {
-                clearTimeout(resizeTimeout);
-                resizeTimeout = setTimeout(() => {
-                    this.resize();
-                }, 250);
+                clearTimeout(this.resizeTimeout);
+                this.resizeTimeout = setTimeout(() => this.resize(), 200);
             });
             
-            // Mobile orientation
-            if (this.isMobile && window.DeviceOrientationEvent) {
-                window.addEventListener('deviceorientation', (e) => {
-                    if (e.gamma !== null && e.beta !== null) {
-                        this.mouse.targetX = (e.gamma / 90) * (this.width / 2) + (this.width / 2);
-                        this.mouse.targetY = (e.beta / 90) * (this.height / 2) + (this.height / 2);
-                    }
-                });
-            }
+            document.addEventListener('visibilitychange', () => {
+                this.isRunning = document.visibilityState === 'visible' && !this.isReducedMotion;
+                if (this.isRunning) this.animate();
+            });
         }
         
         lerpMouse() {
-            // Smooth mouse following
-            const lerpFactor = 0.1;
-            this.mouse.x += (this.mouse.targetX - this.mouse.x) * lerpFactor;
-            this.mouse.y += (this.mouse.targetY - this.mouse.y) * lerpFactor;
+            const factor = 0.08;
+            this.mouse.x += (this.mouse.targetX - this.mouse.x) * factor;
+            this.mouse.y += (this.mouse.targetY - this.mouse.y) * factor;
         }
         
-        drawGridTiles() {
-            this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
-            this.ctx.lineWidth = 1;
+        updateParticles() {
+            const influenceRadius = 200;
+            const parallax = 0.02;
+            this.lines = [];
             
-            this.gridTiles.forEach(tile => {
-                // Heat shimmer effect (subtle)
-                tile.shimmer += 0.02;
-                const shimmerOffset = Math.sin(tile.shimmer) * 2;
+            for (let i = 0; i < this.particles.length; i++) {
+                const p = this.particles[i];
+                const dx = this.mouse.x - p.x;
+                const dy = this.mouse.y - p.y;
+                const dist = Math.sqrt(dx * dx + dy * dy) || 1;
                 
-                // Distance to mouse for parallax
-                const dx = this.mouse.x - tile.x;
-                const dy = this.mouse.y - tile.y;
-                const dist = Math.sqrt(dx * dx + dy * dy);
-                const parallaxFactor = Math.max(0, 1 - dist / 400) * 3;
+                // subtle pull toward/away based on mouse
+                const influence = Math.max(0, influenceRadius - dist) / influenceRadius;
+                p.vx += (dx / dist) * influence * 0.02;
+                p.vy += (dy / dist) * influence * 0.02;
                 
-                this.ctx.save();
-                this.ctx.globalAlpha = tile.opacity + (parallaxFactor * 0.1);
-                this.ctx.strokeRect(
-                    tile.x + shimmerOffset + (parallaxFactor * (dx / dist)),
-                    tile.y + (parallaxFactor * (dy / dist)),
-                    tile.size,
-                    tile.size
-                );
-                this.ctx.restore();
-            });
-        }
-        
-        drawNetworkNodes() {
-            const connectionRadius = 200;
+                // drift damping
+                p.vx *= 0.98;
+                p.vy *= 0.98;
+                
+                // base drift
+                p.x += p.vx + parallax * dx;
+                p.y += p.vy + parallax * dy;
+                
+                // wrap edges
+                if (p.x < -10) p.x = this.width + 10;
+                if (p.x > this.width + 10) p.x = -10;
+                if (p.y < -10) p.y = this.height + 10;
+                if (p.y > this.height + 10) p.y = -10;
+            }
             
-            // Update node positions
-            this.networkNodes.forEach(node => {
-                node.x += node.vx;
-                node.y += node.vy;
-                
-                // Bounce off edges
-                if (node.x < 0 || node.x > this.width) node.vx *= -1;
-                if (node.y < 0 || node.y > this.height) node.vy *= -1;
-                
-                // Constrain
-                node.x = Math.max(0, Math.min(this.width, node.x));
-                node.y = Math.max(0, Math.min(this.height, node.y));
-                
-                // Pulse animation
-                node.pulsePhase += 0.05;
-            });
-            
-            // Draw connections (only near mouse to limit cost)
-            this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
-            this.ctx.lineWidth = 1;
-            
-            for (let i = 0; i < this.networkNodes.length; i++) {
-                const nodeA = this.networkNodes[i];
-                
-                // Check distance to mouse
-                const dmx = this.mouse.x - nodeA.x;
-                const dmy = this.mouse.y - nodeA.y;
-                const distToMouse = Math.sqrt(dmx * dmx + dmy * dmy);
-                
-                if (distToMouse < connectionRadius * 1.5) {
-                    for (let j = i + 1; j < this.networkNodes.length; j++) {
-                        const nodeB = this.networkNodes[j];
-                        const dx = nodeB.x - nodeA.x;
-                        const dy = nodeB.y - nodeA.y;
-                        const dist = Math.sqrt(dx * dx + dy * dy);
-                        
-                        if (dist < connectionRadius) {
-                            const opacity = (1 - dist / connectionRadius) * 0.15;
-                            this.ctx.save();
-                            this.ctx.globalAlpha = opacity;
-                            this.ctx.beginPath();
-                            this.ctx.moveTo(nodeA.x, nodeA.y);
-                            this.ctx.lineTo(nodeB.x, nodeB.y);
-                            this.ctx.stroke();
-                            
-                            // Packet pulse along edge
-                            const pulsePos = (Math.sin(Date.now() * 0.001) + 1) / 2;
-                            const px = nodeA.x + dx * pulsePos;
-                            const py = nodeA.y + dy * pulsePos;
-                            this.ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
-                            this.ctx.beginPath();
-                            this.ctx.arc(px, py, 1.5, 0, Math.PI * 2);
-                            this.ctx.fill();
-                            
-                            this.ctx.restore();
-                        }
+            // build near-cursor connections
+            const lineRadius = 160;
+            for (let i = 0; i < this.particles.length; i++) {
+                for (let j = i + 1; j < this.particles.length; j++) {
+                    const a = this.particles[i];
+                    const b = this.particles[j];
+                    const dx = a.x - b.x;
+                    const dy = a.y - b.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    const mouseDx = (a.x + b.x) / 2 - this.mouse.x;
+                    const mouseDy = (a.y + b.y) / 2 - this.mouse.y;
+                    const mouseDist = Math.sqrt(mouseDx * mouseDx + mouseDy * mouseDy);
+                    
+                    if (dist < lineRadius && mouseDist < influenceRadius) {
+                        this.lines.push({
+                            x1: a.x, y1: a.y,
+                            x2: b.x, y2: b.y,
+                            alpha: (1 - dist / lineRadius) * 0.15
+                        });
                     }
                 }
             }
-            
-            // Draw nodes
-            this.networkNodes.forEach(node => {
-                const pulse = Math.sin(node.pulsePhase) * 0.2 + 1;
-                this.ctx.fillStyle = `rgba(255, 255, 255, ${node.opacity})`;
-                this.ctx.beginPath();
-                this.ctx.arc(node.x, node.y, node.radius * pulse, 0, Math.PI * 2);
-                this.ctx.fill();
-            });
         }
         
-        drawRadarRings() {
-            this.radarRings.forEach(ring => {
-                ring.radius += ring.speed;
-                
-                if (ring.radius > ring.maxRadius) {
-                    ring.radius = 0;
-                    // Occasionally ping near mouse
-                    if (Math.random() > 0.7) {
-                        ring.x = this.mouse.x + (Math.random() - 0.5) * 200;
-                        ring.y = this.mouse.y + (Math.random() - 0.5) * 200;
-                    } else {
-                        ring.x = Math.random() * this.width;
-                        ring.y = Math.random() * this.height;
-                    }
-                }
-                
-                const fadeOut = 1 - (ring.radius / ring.maxRadius);
+        draw() {
+            this.ctx.clearRect(0, 0, this.width, this.height);
+            this.ctx.fillStyle = '#E7E9EE';
+            
+            this.lines.forEach(line => {
                 this.ctx.save();
-                this.ctx.globalAlpha = ring.opacity * fadeOut;
-                this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+                this.ctx.strokeStyle = `rgba(231,233,238,${line.alpha})`;
                 this.ctx.lineWidth = 1;
                 this.ctx.beginPath();
-                this.ctx.arc(ring.x, ring.y, ring.radius, 0, Math.PI * 2);
+                this.ctx.moveTo(line.x1, line.y1);
+                this.ctx.lineTo(line.x2, line.y2);
                 this.ctx.stroke();
-                
-                // Occasional ping blip
-                if (ring.radius < 20 && Math.random() > 0.95) {
-                    this.ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
-                    this.ctx.beginPath();
-                    this.ctx.arc(ring.x, ring.y, 3, 0, Math.PI * 2);
-                    this.ctx.fill();
-                }
-                
+                this.ctx.restore();
+            });
+            
+            this.particles.forEach(p => {
+                this.ctx.save();
+                this.ctx.globalAlpha = p.alpha * 0.6;
+                this.ctx.beginPath();
+                this.ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                this.ctx.fill();
                 this.ctx.restore();
             });
         }
         
         drawStaticFrame() {
             this.ctx.clearRect(0, 0, this.width, this.height);
-            
-            // Draw a single static frame (no animation)
-            this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
-            this.ctx.lineWidth = 1;
-            
-            const tileSize = 100;
-            for (let x = 0; x < this.width; x += tileSize) {
-                for (let y = 0; y < this.height; y += tileSize) {
-                    if (Math.random() > 0.7) {
-                        this.ctx.strokeRect(x, y, tileSize, tileSize);
-                    }
-                }
-            }
-            
-            // Few static nodes
-            this.ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
-            for (let i = 0; i < 15; i++) {
+            for (let i = 0; i < 30; i++) {
                 const x = Math.random() * this.width;
                 const y = Math.random() * this.height;
+                const size = Math.random() * 1.4 + 0.6;
+                const alpha = Math.random() * 0.25 + 0.35;
+                this.ctx.save();
+                this.ctx.globalAlpha = alpha * 0.6;
                 this.ctx.beginPath();
-                this.ctx.arc(x, y, 2, 0, Math.PI * 2);
+                this.ctx.arc(x, y, size, 0, Math.PI * 2);
+                this.ctx.fillStyle = '#E7E9EE';
                 this.ctx.fill();
+                this.ctx.restore();
             }
         }
         
         animate() {
             if (!this.isRunning) return;
-            
-            this.ctx.clearRect(0, 0, this.width, this.height);
-            
             this.lerpMouse();
-            this.drawGridTiles();
-            this.drawNetworkNodes();
-            this.drawRadarRings();
-            
+            this.updateParticles();
+            this.draw();
             requestAnimationFrame(() => this.animate());
         }
     }
@@ -325,10 +205,29 @@
             this.nav = document.getElementById('mainNav');
             this.navLinks = document.querySelectorAll('.nav-link:not(.nav-link-timeline)');
             this.sections = document.querySelectorAll('.section, .hero-section');
+            this.navToggle = document.getElementById('navToggle');
+            this.navList = document.getElementById('primaryNavigation');
             
             if (this.navLinks.length > 0 && this.sections.length > 0) {
                 this.setupIntersectionObserver();
             }
+            this.setupToggle();
+        }
+        
+        setupToggle() {
+            if (!this.navToggle || !this.navList) return;
+            this.navToggle.addEventListener('click', () => {
+                const isOpen = this.navList.classList.toggle('open');
+                this.navToggle.setAttribute('aria-expanded', isOpen);
+            });
+            this.navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    if (this.navList.classList.contains('open')) {
+                        this.navList.classList.remove('open');
+                        this.navToggle.setAttribute('aria-expanded', 'false');
+                    }
+                });
+            });
         }
         
         setupIntersectionObserver() {
@@ -370,7 +269,6 @@
             this.reveals = document.querySelectorAll('.reveal');
             
             if (this.isReducedMotion) {
-                // Show all immediately
                 this.reveals.forEach(el => el.classList.add('revealed'));
             } else {
                 this.setupRevealObserver();
@@ -432,21 +330,54 @@
             this.systemLog = document.getElementById('systemLog');
             this.yearButtons = document.querySelectorAll('.panel-btn[data-year]');
             this.entries = document.querySelectorAll('.timeline-entry');
+            this.panel = document.querySelector('.command-panel');
+            this.panelToggle = null;
             
+            this.setupPanelToggle();
             this.setupEventListeners();
             this.addSystemLog('System initialized');
             this.addSystemLog('Timeline loaded successfully');
         }
         
+        setupPanelToggle() {
+            if (!this.panel) return;
+            const button = document.createElement('button');
+            button.className = 'panel-btn-wide mobile-panel-toggle';
+            button.setAttribute('aria-expanded', 'false');
+            button.textContent = 'Console Controls';
+            this.panel.parentElement.insertBefore(button, this.panel);
+            this.panelToggle = button;
+            
+            const updateVisibility = () => {
+                if (window.innerWidth <= 768) {
+                    this.panel.classList.add('collapsed');
+                    this.panel.style.display = 'none';
+                    this.panelToggle.style.display = 'block';
+                } else {
+                    this.panel.classList.remove('collapsed');
+                    this.panel.style.display = '';
+                    this.panelToggle.style.display = 'none';
+                }
+            };
+            
+            window.addEventListener('resize', () => updateVisibility());
+            updateVisibility();
+            
+            button.addEventListener('click', () => {
+                const isOpen = this.panel.style.display !== 'none';
+                this.panel.style.display = isOpen ? 'none' : '';
+                this.panelToggle.setAttribute('aria-expanded', String(!isOpen));
+                this.addSystemLog(`Console ${isOpen ? 'collapsed' : 'opened'}`);
+            });
+        }
+        
         setupEventListeners() {
-            // Search filter
             if (this.searchInput) {
                 this.searchInput.addEventListener('input', (e) => {
                     this.filterTimeline(e.target.value);
                 });
             }
             
-            // Expand/Collapse all
             if (this.expandAllBtn) {
                 this.expandAllBtn.addEventListener('click', () => {
                     this.expandAll();
@@ -459,25 +390,24 @@
                 });
             }
             
-            // Compact view toggle
             if (this.toggleCompactBtn) {
                 this.toggleCompactBtn.addEventListener('click', () => {
                     document.body.classList.toggle('compact-view');
                     const isCompact = document.body.classList.contains('compact-view');
                     this.toggleCompactBtn.textContent = isCompact ? 'Detailed View' : 'Compact View';
-                    this.addSystemLog(`Switched to ${isCompact ? 'compact' : 'detailed'} view`);
+                    this.addSystemLog(`FILTER APPLIED: view=${isCompact ? 'compact' : 'detailed'}`);
                 });
             }
             
-            // Focus mode
             if (this.focusModeCheckbox) {
                 this.focusModeCheckbox.addEventListener('change', (e) => {
                     document.body.classList.toggle('focus-mode', e.target.checked);
                     this.addSystemLog(`Focus mode ${e.target.checked ? 'enabled' : 'disabled'}`);
+                    const canvas = document.getElementById('backgroundCanvas');
+                    if (canvas) canvas.style.opacity = e.target.checked ? '0.15' : '1';
                 });
             }
             
-            // Year jump buttons
             this.yearButtons.forEach(btn => {
                 btn.addEventListener('click', () => {
                     const year = btn.getAttribute('data-year');
@@ -485,24 +415,31 @@
                 });
             });
             
-            // Entry toggles
             this.entries.forEach(entry => {
                 const toggle = entry.querySelector('.entry-toggle');
                 const content = entry.querySelector('.entry-content');
                 
                 if (toggle && content) {
-                    toggle.addEventListener('click', () => {
-                        const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
-                        toggle.setAttribute('aria-expanded', !isExpanded);
-                        content.classList.toggle('expanded');
-                        
-                        if (!isExpanded) {
-                            const title = entry.querySelector('.entry-title')?.textContent || 'Entry';
-                            this.addSystemLog(`Expanded: ${title}`);
+                    toggle.setAttribute('role', 'button');
+                    toggle.setAttribute('aria-expanded', 'false');
+                    toggle.setAttribute('aria-controls', content.id || '');
+                    toggle.addEventListener('click', () => this.toggleEntry(entry, toggle, content));
+                    toggle.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            this.toggleEntry(entry, toggle, content);
                         }
                     });
                 }
             });
+        }
+        
+        toggleEntry(entry, toggle, content) {
+            const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
+            toggle.setAttribute('aria-expanded', String(!isExpanded));
+            content.classList.toggle('expanded');
+            const title = entry.querySelector('.entry-title')?.textContent || 'Entry';
+            this.addSystemLog(`${!isExpanded ? 'ENTRY EXPANDED' : 'ENTRY COLLAPSED'}: ${title}`);
         }
         
         filterTimeline(query) {
@@ -526,9 +463,7 @@
                 }
             });
             
-            if (query) {
-                this.addSystemLog(`Filter applied: ${visibleCount} entries match`);
-            }
+            this.addSystemLog(`FILTER APPLIED: ${query || 'none'} (${visibleCount} entries)`);
         }
         
         expandAll() {
@@ -542,7 +477,7 @@
                 }
             });
             
-            this.addSystemLog('All entries expanded');
+            this.addSystemLog('ENTRY EXPANDED: all');
         }
         
         collapseAll() {
@@ -556,14 +491,14 @@
                 }
             });
             
-            this.addSystemLog('All entries collapsed');
+            this.addSystemLog('ENTRY COLLAPSED: all');
         }
         
         jumpToYear(year) {
             const yearSection = document.querySelector(`.timeline-year[data-year="${year}"]`);
             if (yearSection) {
                 yearSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                this.addSystemLog(`Jumped to year ${year}`);
+                this.addSystemLog(`FILTER APPLIED: jump ${year}`);
             }
         }
         
@@ -584,9 +519,8 @@
             this.systemLog.appendChild(entry);
             this.systemLog.scrollTop = this.systemLog.scrollHeight;
             
-            // Limit log entries
             const entries = this.systemLog.querySelectorAll('.log-entry');
-            if (entries.length > 50) {
+            if (entries.length > 60) {
                 entries[0].remove();
             }
         }
