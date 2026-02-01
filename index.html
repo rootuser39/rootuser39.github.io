@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rishabh Durugkar | Infrastructure · Networking · Security Engineer</title>
+    <meta name="description" content="Infrastructure, networking, and security engineer specializing in AI-ready systems, observability, and automation.">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <canvas id="backgroundCanvas" aria-hidden="true"></canvas>
+
+    <nav id="mainNav" class="navbar">
+        <div class="nav-container">
+            <a href="#home" class="nav-brand">Rishabh Durugkar</a>
+            <ul class="nav-links">
+                <li><a href="#home" class="nav-link active">Home</a></li>
+                <li><a href="#about" class="nav-link">About</a></li>
+                <li><a href="#experience" class="nav-link">Experience</a></li>
+                <li><a href="#projects" class="nav-link">Projects</a></li>
+                <li><a href="#education" class="nav-link">Education</a></li>
+                <li><a href="#certifications" class="nav-link">Certifications</a></li>
+                <li><a href="#skills" class="nav-link">Skills</a></li>
+                <li><a href="#contact" class="nav-link">Contact</a></li>
+                <li><a href="timeline.html" class="nav-link nav-link-timeline">Timeline</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <button id="backToTop" class="back-to-top" aria-label="Back to top">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M10 4L10 16M10 4L4 10M10 4L16 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </button>
+
+    <main>
+        <section id="home" class="hero-section reveal">
+            <div class="container">
+                <h1 class="hero-title">Infrastructure · Networking · Security Engineer</h1>
+                <p class="hero-subtitle">AI-ready systems • CCNP (Enterprise + Automation) • NVIDIA AI Infrastructure</p>
+            </div>
+        </section>
+
+        <section id="about" class="section reveal">
+            <div class="container">
+                <h2 class="section-title">About</h2>
+                <div class="content-card">
+                    <p>I build reliable infrastructure systems that scale under pressure. My focus is on network reliability, observability pipelines, and security systems thinking. I work at the intersection of AI-ready networking, automation, and operational resilience—designing systems that handle failures gracefully and optimize resources efficiently.</p>
+                    <p>From operating enterprise L2/L3 networks to building AI-aware traffic optimizations and GPU observability correlators, I approach infrastructure as a cohesive system where compute, fabric, and defense layers must work in harmony.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="experience" class="section reveal">
+            <div class="container">
+                <h2 class="section-title">Experience</h2>
+                
+                <div class="timeline-item">
+                    <div class="timeline-header">
+                        <div>
+                            <h3 class="timeline-title">Independent Infrastructure Consultant (NDA)</h3>
+                            <p class="timeline-meta">Sep 2022 – Present</p>
+                        </div>
+                        <span class="timeline-tag">Remote</span>
+                    </div>
+                    <div class="timeline-content">
+                        <p class="timeline-summary">Project-based infrastructure + automation work under NDA; AI-ready networking, observability, failure analysis, cost optimization.</p>
+                        <ul class="timeline-list">
+                            <li>AI-aware traffic simulations for congestion/latency risk</li>
+                            <li>GPU/infrastructure observability correlating compute/network/workload</li>
+                            <li>Resilient edge inference under constrained networks</li>
+                            <li>Traffic-aware security detection for AI workloads</li>
+                            <li>Failure injection testing for faster RCA</li>
+                            <li>Cost driver modeling and optimization strategies</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-header">
+                        <div>
+                            <h3 class="timeline-title">Security Network Engineer</h3>
+                            <p class="timeline-meta">Wipro Ltd • Jan 2021 – Aug 2022</p>
+                        </div>
+                        <span class="timeline-tag">Hybrid</span>
+                    </div>
+                    <div class="timeline-content">
+                        <ul class="timeline-list">
+                            <li>Operated enterprise L2/L3 networks (BGP, OSPF, SD-WAN, VPNs)</li>
+                            <li>Supported hybrid cloud networking (AWS VPCs, IPSec, firewall policy enforcement)</li>
+                            <li>On-call escalation; incident response; RCA and permanent fixes</li>
+                            <li>Automated config/validation workflows (Python, Terraform, PowerShell)</li>
+                            <li>Change management and compliance constraints</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects" class="section reveal">
+            <div class="container">
+                <h2 class="section-title">Projects</h2>
+                <div class="projects-grid">
+                    
+                    <article class="project-card">
+                        <div class="project-header">
+                            <h3 class="project-title">AI-Aware Network Traffic Optimization</h3>
+                            <span class="project-badge">Fabric</span>
+                        </div>
+                        <div class="project-content">
+                            <div class="project-section">
+                                <h4>Problem</h4>
+                                <p>AI training workloads create unpredictable traffic patterns leading to congestion and latency spikes.</p>
+                            </div>
+                            <div class="project-section">
+                                <h4>Build</h4>
+                                <p>Traffic simulation engine analyzing GPU communication patterns, predicting congestion points, and optimizing routing decisions.</p>
+                            </div>
+                            <div class="project-section">
+                                <h4>Outcome</h4>
+                                <p>Reduced tail latency by 35% during peak training periods through predictive traffic shaping.</p>
+                            </div>
+                            <div class="project-section">
+                                <h4>Stack</h4>
+                                <p class="project-tech">Python • Network Simulation • Traffic Analysis • BGP</p>
+                            </div>
+                        </div>
+                        <div class="project-links">
+                            <a href="#" class="project-link">Details</a>
+                        </div>
+                    </article>
+
+                    <article class="project-card">
+                        <div class="project-header">
+                            <h3 class="project-title">GPU & Infrastructure Observability Correlator</h3>
+                            <span class="project-badge">Compute</span>
+                        </div>
+                        <div class="project-content">
+                            <div class="project-section">
+                                <h4>Problem</h4>
+                                <p>Performance degradation in GPU clusters often stems from network or storage issues, not compute itself.</p>
+                            </div>
+                            <div class="project-section">
+                                <h4>Build</h4>
+                                <p>Multi-layer observability pipeline correlating GPU utilization, network throughput, and workload characteristics.</p>
+                            </div>
+                            <div class="project-section">
+                                <h4>Outcome</h4>
+                                <p>Reduced MTTR by 60% through automated correlation of infrastructure and compute metrics.</p>
+                            </div>
+                            <div class="project-section">
+                                <h4>Stack</h4>
+                                <p class="project-tech">Prometheus • Grafana • NVIDIA SMI • Network Telemetry</p>
+                            </div>
+                        </div>
+                        <div class="project-links">
+                            <a href="#" class="project-link">Details</a>
+                        </div>
+                    </article>
+
+                    <article class="project-card">
+                        <div class="project-header">
+                            <h3 class="project-title">Edge Inference Under Constrained Networks</h3>
+                            <span class="project-badge">Fabric</span>
+                        </div>
+                        <div class="project-content">
+                            <div class="project-section">
+                                <h4>Problem</h4>
+                                <p>Edge inference nodes face unreliable connectivity and bandwidth constraints while requiring consistent SLAs.</p>
+                            </div>
+                            <div class="project-section">
+                                <h4>Build</h4>
+                                <p>Adaptive inference system with intelligent model caching, request batching, and graceful degradation strategies.</p>
+                            </div>
+                            <div class="project-section">
+                                <h4>Outcome</h4>
+                                <p>Maintained 99.5% uptime despite 40% packet loss scenarios through resilient architecture.</p>
+                            </div>
+                            <div class="project-section">
+                                <h4>Stack</h4>
+                                <p class="project-tech">ONNX Runtime • Redis • Network QoS • Failover Logic</p>
+                            </div>
+                        </div>
+                        <div class="project-links">
+                            <a href="#" class="project-link">Details</a>
+                        </div>
+                    </article>
+
+                    <article class="project-card">
+                        <div class="project-header">
+                            <h3 class="project-title">Traffic-Aware Security Detection for AI Workloads</h3>
+                            <span class="project-badge">Defense</span>
+                        </div>
+                        <div class="project-content">
+                            <div class="project-section">
+                                <h4>Problem</h4>
+                                <p>Traditional security tools generate false positives on AI workload traffic patterns (burst transfers, large payloads).</p>
+                            </div>
+                            <div class="project-section">
+                                <h4>Build</h4>
+                                <p>ML-based anomaly detection system trained on legitimate AI traffic patterns with context-aware alerting.</p>
+                            </div>
+                            <div class="project-section">
+                                <h4>Outcome</h4>
+                                <p>Reduced false positives by 75% while detecting actual threats with 95% precision.</p>
+                            </div>
+                            <div class="project-section">
+                                <h4>Stack</h4>
+                                <p class="project-tech">Zeek • Suricata • Machine Learning • Flow Analysis</p>
+                            </div>
+                        </div>
+                        <div class="project-links">
+                            <a href="#" class="project-link">Details</a>
+                        </div>
+                    </article>
+
+                    <article class="project-card">
+                        <div class="project-header">
+                            <h3 class="project-title">Failure Injection Lab for Faster RCA</h3>
+                            <span class="project-badge">Compute</span>
+                        </div>
+                        <div class="project-content">
+                            <div class="project-section">
+                                <h4>Problem</h4>
+                                <p>Teams struggle to identify root causes quickly during outages due to lack of failure pattern knowledge.</p>
+                            </div>
+                            <div class="project-section">
+                                <h4>Build</h4>
+                                <p>Chaos engineering platform for systematic failure injection with automated symptom cataloging and playbooks.</p>
+                            </div>
+                            <div class="project-section">
+                                <h4>Outcome</h4>
+                                <p>Reduced average incident resolution time from 4 hours to 45 minutes through documented failure patterns.</p>
+                            </div>
+                            <div class="project-section">
+                                <h4>Stack</h4>
+                                <p class="project-tech">Chaos Mesh • Kubernetes • Terraform • Runbooks</p>
+                            </div>
+                        </div>
+                        <div class="project-links">
+                            <a href="#" class="project-link">Details</a>
+                        </div>
+                    </article>
+
+                    <article class="project-card">
+                        <div class="project-header">
+                            <h3 class="project-title">Cost Driver Modeling for AI Infrastructure</h3>
+                            <span class="project-badge">Compute</span>
+                        </div>
+                        <div class="project-content">
+                            <div class="project-section">
+                                <h4>Problem</h4>
+                                <p>Cloud AI infrastructure costs spiral without visibility into primary cost drivers and optimization opportunities.</p>
+                            </div>
+                            <div class="project-section">
+                                <h4>Build</h4>
+                                <p>Cost attribution system mapping workload characteristics to resource consumption with actionable optimization recommendations.</p>
+                            </div>
+                            <div class="project-section">
+                                <h4>Outcome</h4>
+                                <p>Identified $120K annual savings through GPU right-sizing and network optimization strategies.</p>
+                            </div>
+                            <div class="project-section">
+                                <h4>Stack</h4>
+                                <p class="project-tech">FinOps • Cloud Billing APIs • Data Analysis • Optimization</p>
+                            </div>
+                        </div>
+                        <div class="project-links">
+                            <a href="#" class="project-link">Details</a>
+                        </div>
+                    </article>
+
+                </div>
+            </div>
+        </section>
+
+        <section id="education" class="section reveal">
+            <div class="container">
+                <h2 class="section-title">Education</h2>
+                
+                <div class="timeline-item">
+                    <div class="timeline-header">
+                        <div>
+                            <h3 class="timeline-title">MSc / Graduate Diploma</h3>
+                            <p class="timeline-meta">Electronic & Computer Technology (IoT) • Dublin • 2022–2025</p>
+                        </div>
+                    </div>
+                    <div class="timeline-content">
+                        <p><strong>Capstone: Arcane Guard — AI-Driven Security for IoT Networks</strong></p>
+                        <p>ML/DL-based intrusion detection system with real-time pipeline processing, scalable architecture, and false positive reduction through multi-stage classification.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-header">
+                        <div>
+                            <h3 class="timeline-title">Bachelor of Science</h3>
+                            <p class="timeline-meta">Network & Technology</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="certifications" class="section reveal">
+            <div class="container">
+                <h2 class="section-title">Certifications</h2>
+                <div class="cert-grid">
+                    <div class="cert-card cert-in-progress">
+                        <h3 class="cert-title">CCNP Enterprise</h3>
+                        <p class="cert-status">In Progress</p>
+                    </div>
+                    <div class="cert-card cert-in-progress">
+                        <h3 class="cert-title">CCNP ENAUTO</h3>
+                        <p class="cert-status">In Progress</p>
+                    </div>
+                    <div class="cert-card cert-in-progress">
+                        <h3 class="cert-title">NVIDIA AI Infrastructure</h3>
+                        <p class="cert-status">In Progress</p>
+                    </div>
+                    <div class="cert-card cert-planned">
+                        <h3 class="cert-title">PNPT</h3>
+                        <p class="cert-status">Next</p>
+                    </div>
+                    <div class="cert-card cert-planned">
+                        <h3 class="cert-title">DevSecOps</h3>
+                        <p class="cert-status">Next</p>
+                    </div>
+                    <div class="cert-card cert-planned">
+                        <h3 class="cert-title">CCT</h3>
+                        <p class="cert-status">Next</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="skills" class="section reveal">
+            <div class="container">
+                <h2 class="section-title">Skills</h2>
+                <div class="skills-grid">
+                    
+                    <div class="skill-category">
+                        <h3 class="skill-category-title">AI Infrastructure</h3>
+                        <ul class="skill-list">
+                            <li>GPU Cluster Orchestration</li>
+                            <li>NVIDIA Architecture (H100, A100)</li>
+                            <li>InfiniBand / RDMA Networking</li>
+                            <li>AI Workload Optimization</li>
+                            <li>Model Deployment Pipelines</li>
+                            <li>Resource Scheduling</li>
+                        </ul>
+                    </div>
+
+                    <div class="skill-category">
+                        <h3 class="skill-category-title">Networking</h3>
+                        <ul class="skill-list">
+                            <li>BGP, OSPF, SD-WAN</li>
+                            <li>Enterprise L2/L3 Networks</li>
+                            <li>VPN (IPSec, WireGuard)</li>
+                            <li>AWS VPC, Hybrid Cloud</li>
+                            <li>Network Observability</li>
+                            <li>Traffic Engineering</li>
+                        </ul>
+                    </div>
+
+                    <div class="skill-category">
+                        <h3 class="skill-category-title">Automation</h3>
+                        <ul class="skill-list">
+                            <li>Python, Bash, PowerShell</li>
+                            <li>Terraform, Ansible</li>
+                            <li>CI/CD Pipelines</li>
+                            <li>Infrastructure as Code</li>
+                            <li>Configuration Management</li>
+                            <li>Workflow Orchestration</li>
+                        </ul>
+                    </div>
+
+                    <div class="skill-category">
+                        <h3 class="skill-category-title">Cloud & Observability</h3>
+                        <ul class="skill-list">
+                            <li>AWS, Azure, GCP</li>
+                            <li>Kubernetes, Docker</li>
+                            <li>Prometheus, Grafana</li>
+                            <li>Log Aggregation</li>
+                            <li>Distributed Tracing</li>
+                            <li>Incident Response</li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="section reveal">
+            <div class="container">
+                <h2 class="section-title">Contact</h2>
+                <div class="contact-content">
+                    <p class="contact-intro">Interested in infrastructure reliability, AI-ready networking, or systems architecture? Let's connect.</p>
+                    <div class="contact-buttons">
+                        <a href="https://github.com/rootuser39" class="contact-btn" target="_blank" rel="noopener noreferrer">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M10 0C4.477 0 0 4.477 0 10c0 4.42 2.865 8.17 6.839 9.49.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0110 4.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C17.137 18.165 20 14.418 20 10c0-5.523-4.477-10-10-10z"/>
+                            </svg>
+                            GitHub
+                        </a>
+                        <a href="https://linkedin.com/in/rishabhdurugkar" class="contact-btn" target="_blank" rel="noopener noreferrer">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M4.98 2.5A2.49 2.49 0 012.5 5 2.49 2.49 0 014.98 7.5 2.49 2.49 0 017.47 5a2.49 2.49 0 01-2.49-2.5zM7.47 8.83H2.5V17.5h4.97V8.83zM11.43 8.83h-4.97V17.5h4.97v-4.5c0-4.5 5.83-4.88 5.83 0v4.5H22V11.5c0-7.5-8.48-7.23-10.57-3.53v-1.14z"/>
+                            </svg>
+                            LinkedIn
+                        </a>
+                        <a href="mailto:contact@rishabhdurugkar.me" class="contact-btn">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="2" y="4" width="16" height="12" rx="2"/>
+                                <path d="M2 6l8 5 8-5"/>
+                            </svg>
+                            Email
+                        </a>
+                        <a href="#" class="contact-btn contact-btn-resume">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M6 2h8l4 4v12a2 2 0 01-2 2H4a2 2 0 01-2-2V4a2 2 0 012-2z"/>
+                                <path d="M14 2v4h4M12 11H8M12 15H8M10 7H8"/>
+                            </svg>
+                            Resume PDF
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 Rishabh Durugkar. Infrastructure · Networking · Security.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

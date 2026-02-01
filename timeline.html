@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timeline | Rishabh Durugkar</title>
+    <meta name="description" content="Professional timeline and career progression.">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="timeline-page">
+    <canvas id="backgroundCanvas" aria-hidden="true"></canvas>
+
+    <nav id="mainNav" class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-brand">Rishabh Durugkar</a>
+            <ul class="nav-links">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="timeline.html" class="nav-link active">Timeline</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="timeline-main">
+        <aside class="command-panel">
+            <div class="panel-header">
+                <h2 class="panel-title">Command Console</h2>
+                <div class="panel-status">
+                    <span class="status-indicator"></span>
+                    <span class="status-text">ONLINE</span>
+                </div>
+            </div>
+
+            <div class="panel-section">
+                <label for="timelineSearch" class="panel-label">Filter Timeline</label>
+                <input 
+                    type="text" 
+                    id="timelineSearch" 
+                    class="panel-input" 
+                    placeholder="Search entries..."
+                    aria-label="Filter timeline entries"
+                >
+            </div>
+
+            <div class="panel-section">
+                <p class="panel-label">Quick Jump</p>
+                <div class="panel-buttons">
+                    <button class="panel-btn" data-year="2026">2026</button>
+                    <button class="panel-btn" data-year="2025">2025</button>
+                    <button class="panel-btn" data-year="2024">2024</button>
+                    <button class="panel-btn" data-year="2023">2023</button>
+                    <button class="panel-btn" data-year="2022">2022</button>
+                    <button class="panel-btn" data-year="2021">2021</button>
+                </div>
+            </div>
+
+            <div class="panel-section">
+                <p class="panel-label">Timeline Controls</p>
+                <div class="panel-controls">
+                    <button id="expandAll" class="panel-btn-wide">Expand All</button>
+                    <button id="collapseAll" class="panel-btn-wide">Collapse All</button>
+                    <button id="toggleCompact" class="panel-btn-wide">Compact View</button>
+                </div>
+            </div>
+
+            <div class="panel-section">
+                <label class="panel-checkbox">
+                    <input type="checkbox" id="focusMode">
+                    <span>Focus Mode</span>
+                </label>
+            </div>
+
+            <div class="panel-section system-log-section">
+                <p class="panel-label">System Log</p>
+                <div id="systemLog" class="system-log" role="log" aria-live="polite" aria-atomic="false"></div>
+            </div>
+        </aside>
+
+        <div class="timeline-content">
+            <div class="timeline-header">
+                <h1 class="timeline-page-title">Professional Timeline</h1>
+                <p class="timeline-page-subtitle">Career progression and key milestones</p>
+            </div>
+
+            <div class="timeline-container">
+                
+                <div class="timeline-year" data-year="2026">
+                    <h2 class="year-header">2026</h2>
+                    
+                    <article class="timeline-entry" data-date="2026-01">
+                        <button class="entry-toggle" aria-expanded="false">
+                            <svg class="toggle-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span class="entry-date">Q1 2026</span>
+                            <span class="entry-title">CCNP Certification Track</span>
+                        </button>
+                        <div class="entry-content">
+                            <p>Pursuing CCNP Enterprise and ENAUTO certifications to formalize expertise in enterprise networking and automation. Focus on advanced routing, SD-WAN, and network programmability.</p>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="timeline-year" data-year="2025">
+                    <h2 class="year-header">2025</h2>
+                    
+                    <article class="timeline-entry" data-date="2025-08">
+                        <button class="entry-toggle" aria-expanded="false">
+                            <svg class="toggle-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span class="entry-date">Aug 2025</span>
+                            <span class="entry-title">Graduate Program Completion</span>
+                        </button>
+                        <div class="entry-content">
+                            <p>Completed MSc/Graduate Diploma in Electronic & Computer Technology (IoT) from Dublin. Capstone project: Arcane Guard—AI-driven security system for IoT networks using ML/DL detection with real-time processing pipeline.</p>
+                        </div>
+                    </article>
+
+                    <article class="timeline-entry" data-date="2025-05">
+                        <button class="entry-toggle" aria-expanded="false">
+                            <svg class="toggle-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span class="entry-date">May 2025</span>
+                            <span class="entry-title">Cost Optimization Project</span>
+                        </button>
+                        <div class="entry-content">
+                            <p>Delivered cost driver modeling system for AI infrastructure client. Identified $120K annual savings through GPU right-sizing and network optimization. Implemented FinOps practices and automated cost attribution.</p>
+                        </div>
+                    </article>
+
+                    <article class="timeline-entry" data-date="2025-02">
+                        <button class="entry-toggle" aria-expanded="false">
+                            <svg class="toggle-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span class="entry-date">Feb 2025</span>
+                            <span class="entry-title">NVIDIA AI Infrastructure Studies</span>
+                        </button>
+                        <div class="entry-content">
+                            <p>Started NVIDIA AI Infrastructure certification program. Focus areas: GPU architecture, CUDA optimization, InfiniBand networking, and AI workload orchestration.</p>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="timeline-year" data-year="2024">
+                    <h2 class="year-header">2024</h2>
+                    
+                    <article class="timeline-entry" data-date="2024-11">
+                        <button class="entry-toggle" aria-expanded="false">
+                            <svg class="toggle-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span class="entry-date">Nov 2024</span>
+                            <span class="entry-title">Failure Injection Lab</span>
+                        </button>
+                        <div class="entry-content">
+                            <p>Built chaos engineering platform for systematic failure injection testing. Reduced average incident resolution time from 4 hours to 45 minutes through documented failure patterns and automated playbooks.</p>
+                        </div>
+                    </article>
+
+                    <article class="timeline-entry" data-date="2024-08">
+                        <button class="entry-toggle" aria-expanded="false">
+                            <svg class="toggle-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span class="entry-date">Aug 2024</span>
+                            <span class="entry-title">Traffic-Aware Security Detection</span>
+                        </button>
+                        <div class="entry-content">
+                            <p>Deployed ML-based anomaly detection system for AI workload traffic. Reduced false positives by 75% while maintaining 95% threat detection precision. Integrated with Zeek and Suricata for real-time analysis.</p>
+                        </div>
+                    </article>
+
+                    <article class="timeline-entry" data-date="2024-04">
+                        <button class="entry-toggle" aria-expanded="false">
+                            <svg class="toggle-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span class="entry-date">Apr 2024</span>
+                            <span class="entry-title">Edge Inference System</span>
+                        </button>
+                        <div class="entry-content">
+                            <p>Designed resilient edge inference architecture for constrained networks. Implemented adaptive model caching and graceful degradation. Achieved 99.5% uptime despite 40% packet loss scenarios.</p>
+                        </div>
+                    </article>
+
+                    <article class="timeline-entry" data-date="2024-01">
+                        <button class="entry-toggle" aria-expanded="false">
+                            <svg class="toggle-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span class="entry-date">Jan 2024</span>
+                            <span class="entry-title">GPU Observability Correlator</span>
+                        </button>
+                        <div class="entry-content">
+                            <p>Launched multi-layer observability pipeline correlating GPU utilization, network throughput, and workload characteristics. Reduced MTTR by 60% through automated metric correlation and root cause analysis.</p>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="timeline-year" data-year="2023">
+                    <h2 class="year-header">2023</h2>
+                    
+                    <article class="timeline-entry" data-date="2023-09">
+                        <button class="entry-toggle" aria-expanded="false">
+                            <svg class="toggle-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span class="entry-date">Sep 2023</span>
+                            <span class="entry-title">AI Traffic Optimization</span>
+                        </button>
+                        <div class="entry-content">
+                            <p>Developed AI-aware network traffic optimization system. Built traffic simulation engine analyzing GPU communication patterns and predicting congestion points. Reduced tail latency by 35% during peak training periods.</p>
+                        </div>
+                    </article>
+
+                    <article class="timeline-entry" data-date="2023-04">
+                        <button class="entry-toggle" aria-expanded="false">
+                            <svg class="toggle-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span class="entry-date">Apr 2023</span>
+                            <span class="entry-title">Graduate Studies Focus Shift</span>
+                        </button>
+                        <div class="entry-content">
+                            <p>Specialized coursework in IoT security, network protocols, and machine learning for embedded systems. Research focus on AI-driven threat detection in resource-constrained environments.</p>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="timeline-year" data-year="2022">
+                    <h2 class="year-header">2022</h2>
+                    
+                    <article class="timeline-entry" data-date="2022-09">
+                        <button class="entry-toggle" aria-expanded="false">
+                            <svg class="toggle-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span class="entry-date">Sep 2022</span>
+                            <span class="entry-title">Transitioned to Independent Consulting</span>
+                        </button>
+                        <div class="entry-content">
+                            <p>Started independent infrastructure consulting practice. Focus on AI-ready networking, observability systems, and failure analysis. Project-based work under NDA with emphasis on automation and cost optimization.</p>
+                        </div>
+                    </article>
+
+                    <article class="timeline-entry" data-date="2022-09">
+                        <button class="entry-toggle" aria-expanded="false">
+                            <svg class="toggle-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span class="entry-date">Sep 2022</span>
+                            <span class="entry-title">Graduate Program Start</span>
+                        </button>
+                        <div class="entry-content">
+                            <p>Enrolled in MSc/Graduate Diploma program for Electronic & Computer Technology (IoT) in Dublin. Focus on network security, embedded systems, and machine learning applications.</p>
+                        </div>
+                    </article>
+
+                    <article class="timeline-entry" data-date="2022-08">
+                        <button class="entry-toggle" aria-expanded="false">
+                            <svg class="toggle-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span class="entry-date">Aug 2022</span>
+                            <span class="entry-title">Concluded Wipro Engagement</span>
+                        </button>
+                        <div class="entry-content">
+                            <p>Completed role as Security Network Engineer at Wipro. Key achievements: automated network validation workflows reducing manual effort by 70%, improved incident response times, delivered zero-downtime migrations for critical services.</p>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="timeline-year" data-year="2021">
+                    <h2 class="year-header">2021</h2>
+                    
+                    <article class="timeline-entry" data-date="2021-06">
+                        <button class="entry-toggle" aria-expanded="false">
+                            <svg class="toggle-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span class="entry-date">Jun 2021</span>
+                            <span class="entry-title">Hybrid Cloud Networking Project</span>
+                        </button>
+                        <div class="entry-content">
+                            <p>Led hybrid cloud networking initiative connecting on-premises data centers with AWS VPCs. Implemented IPSec tunnels, BGP routing, and firewall policy enforcement. Reduced cross-cloud latency by 40%.</p>
+                        </div>
+                    </article>
+
+                    <article class="timeline-entry" data-date="2021-01">
+                        <button class="entry-toggle" aria-expanded="false">
+                            <svg class="toggle-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span class="entry-date">Jan 2021</span>
+                            <span class="entry-title">Started at Wipro Ltd</span>
+                        </button>
+                        <div class="entry-content">
+                            <p>Joined Wipro as Security Network Engineer. Responsibilities: enterprise L2/L3 network operations (BGP, OSPF, SD-WAN, VPNs), incident response, automation workflows (Python, Terraform, PowerShell), change management, and compliance.</p>
+                        </div>
+                    </article>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 Rishabh Durugkar. Infrastructure · Networking · Security.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
