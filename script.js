@@ -289,7 +289,7 @@
         adjustQuality() {
             const avgFT = this.fpsMonitor.avgFrameTime;
             
-            // If avg frame time > 18ms for 1s (60 frames), reduce quality
+            // If avg frame time > 18ms (sustained over 60 frames), reduce quality
             if (avgFT > 18) {
                 if (this.quality.scale > 0.5) {
                     this.quality.scale = Math.max(0.5, this.quality.scale - 0.1);
@@ -307,8 +307,8 @@
                     this.fpsMonitor.qualityChangeDelay = 120; // Wait 2s before next change
                 }
             }
-            // If avg frame time < 14ms for 2s (120 frames), gently increase quality
-            else if (avgFT < 14 && this.fpsMonitor.frameTimes.length >= 120) {
+            // If avg frame time < 14ms (sustained), gently increase quality
+            else if (avgFT < 14) {
                 const maxDpr = this.isMobile ? 1.25 : 1.5;
                 const maxParticles = this.isMobile ? 40 : 75;
                 const maxLinesLimit = this.isMobile ? 60 : 100;
