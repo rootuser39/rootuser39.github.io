@@ -321,6 +321,7 @@
     class TimelinePage {
         constructor() {
             if (!document.body.classList.contains('timeline-page')) return;
+            this.MAX_LOG_ENTRIES = 60;
             
             this.searchInput = document.getElementById('timelineSearch');
             this.expandAllBtn = document.getElementById('expandAll');
@@ -520,7 +521,7 @@
             this.systemLog.scrollTop = this.systemLog.scrollHeight;
             
             const entries = this.systemLog.querySelectorAll('.log-entry');
-            if (entries.length > 60) {
+            if (entries.length > this.MAX_LOG_ENTRIES) {
                 entries[0].remove();
             }
         }
