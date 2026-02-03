@@ -1,317 +1,301 @@
-# Infrastructure Command Console Portfolio
+# Infrastructure Command Console Portfolio - Next.js RSC
 
-Emperor black/grey portfolio for infrastructure, networking, and security engineering. Pure HTML/CSS/JS—no frameworks or external assets.
+A premium, minimalist portfolio for infrastructure, networking, and security engineering built with Next.js App Router, React Server Components, Tailwind CSS, and Framer Motion.
+
+## Features
+
+- **Emperor Black/Grey Theme**: Minimal "infrastructure command console" aesthetic
+- **React Server Components**: Fast, RSC-first architecture with small client bundles
+- **Tailwind CSS**: Custom design tokens for consistent theming
+- **Framer Motion**: Tasteful micro-animations (respects reduced motion)
+- **Supabase Integration**: Optional content source with local fallback data
+- **TanStack Query**: Client-side state management for interactive filtering
+- **Accessibility**: Keyboard navigation, reduced motion support, ARIA labels
+- **Mobile-First**: Fully responsive design
+- **Static Export**: Deploys to GitHub Pages, Vercel, or any static host
 
 ## Pages
-- `index.html` — main portfolio with hero boot sequence
-- `timeline.html` — console-style timeline
-- `services.html` — services overview
 
-## Hero Section
+- **Home (/)**: Hero section with Ops Brief card, About, Experience, Projects, Education, Certifications, Skills, Contact
+- **Projects (/projects)**: Filterable project showcase with tag-based filtering
+- **Services (/services)**: Service offerings with detailed descriptions
+- **Timeline (/timeline)**: Interactive console-style timeline with filtering and system log
 
-The homepage features a minimal, premium "Operator Brief" layout with a 2-column asymmetric design:
+## Prerequisites
 
-### Layout Structure
+- Node.js 18+ 
+- npm, yarn, or pnpm
 
-**Desktop:**
-- Left column (60-65%): Name, role, value statement, rotating Operator Brief slideshow, and 2 CTAs
-- Right column (35-40%): "Ops Brief" glass card with key professional details
+## Getting Started
 
-**Mobile:**
-- Columns stack vertically
-- Ops Brief card appears below CTAs
-
-### Operator Brief Slideshow
-
-Below the value statement, a micro-slideshow displays 4 rotating "modes" showcasing different areas of expertise:
-
-**Slide Structure:**
-Each slide has:
-- Mode badge (e.g., "MODE 01")
-- Headline (one line)
-- Description line (one line)
-
-**Default Slides:**
-1. **MODE 01 — Reliability**: "Reliability under load." / "Incident response → RCA → permanent fixes and guardrails."
-2. **MODE 02 — Automation**: "Change safety and speed." / "Validation, drift detection, and repeatable workflows."
-3. **MODE 03 — AI-ready Infrastructure**: "AI-ready system readiness." / "GPU/network/storage correlation and bottleneck diagnosis."
-4. **MODE 04 — Security**: "Security as a system." / "Segmentation, policy enforcement, and detection signals."
-
-**Editing Slides:**
-Modify slides in `index.html` within the `.operator-brief-module`:
-
-```html
-<div class="operator-brief-slide" data-mode="1">
-    <h3 class="operator-brief-headline">Your headline here</h3>
-    <p class="operator-brief-line">Your description line here</p>
-</div>
-```
-
-**Changing Timing:**
-Edit `script.js` in the `OperatorBrief` class constructor:
-
-```javascript
-// Random timing between 3.8-4.5 seconds (default)
-this.getRandomInterval = () => 3800 + Math.random() * 700;
-
-// For fixed timing (e.g., 4 seconds):
-this.getRandomInterval = () => 4000;
-
-// For different range (e.g., 5-6 seconds):
-this.getRandomInterval = () => 5000 + Math.random() * 1000;
-```
-
-**Behavior:**
-- Auto-rotates with randomized timing (3.8-4.5s by default)
-- Smooth slide-up + fade transition
-- 4 progress dots at bottom (clickable)
-- Pauses on hover/focus
-- Resumes after 8s idle
-- Fully accessible with ARIA labels
-- Respects `prefers-reduced-motion`: shows only first slide with no animation
-
-### Micro-Motion Animation
-
-On page load, the hero content fades in with a subtle upward translate (350ms). This animation is automatically disabled for users who prefer reduced motion.
-
-### Editing Hero Content
-
-All hero content is in `index.html` within the `.hero-section`:
-
-```html
-<!-- Left column: Main content -->
-<div class="hero-left">
-    <!-- Large name -->
-    <h1 class="hero-name">Rishabh Durugkar</h1>
-    
-    <!-- Role headline (use / separators) -->
-    <h2 class="hero-title">Infrastructure / Networking / Security</h2>
-    
-    <!-- One-line value statement -->
-    <p class="hero-value">Reliability, automation, and observability for AI-ready environments.</p>
-    
-    <!-- CTAs -->
-    <div class="hero-ctas">
-        <a href="#projects" class="hero-cta hero-cta-primary">View Projects</a>
-        <a href="/resume.pdf" class="hero-cta hero-cta-secondary">Download Resume</a>
-    </div>
-</div>
-
-<!-- Right column: Ops Brief card -->
-<div class="hero-right">
-    <div class="ops-brief-card">
-        <h3 class="ops-brief-title">Ops Brief</h3>
-        <div class="ops-brief-content">
-            <p><strong>Focus:</strong> Your focus area</p>
-            <p><strong>Background:</strong> Your background</p>
-            <p><strong>Current:</strong> Current certifications/work</p>
-        </div>
-    </div>
-</div>
-```
-
-### Resume Link
-
-Update the resume link in two places:
-1. Hero section: `<a href="/resume.pdf"...>` in `.hero-ctas`
-2. Contact section: `<a href="/resume.pdf"...>` in contact buttons
-
-Place your `resume.pdf` file in the repository root, or update the path to match your file location.
-
-## Advanced Background FX Pipeline
-
-The site features a modular, high-performance FX pipeline with 4 layers that work together to create a clean, exotic "Ion Field" background effect:
-
-### FX Layers
-
-1. **Flow Field Layer**: Value-noise based flow field that guides particles in smooth, organic patterns. Particles drift autonomously without mouse tracking.
-
-2. **Local Web Layer**: Connection lines drawn only between close neighbors using spatial hashing (grid binning) for efficient neighbor detection. Hard-capped line draws per frame.
-
-3. **Low-res Distortion/Glow Layer**: 1/3 scale buffer creating faint metaball-like glow blobs, composited to main canvas with very low opacity. Automatically disabled on mobile devices.
-
-4. **CSS Overlay Layer**: Subtle scanline effects using pure CSS gradients (no external images, no diagonal scratches). Automatically disabled in reduced-motion mode.
-
-### Background Modes
-
-The background implements the **Ion Field** mode:
-- Low-resolution plasma/flow field with pseudo-noise
-- Sparse particle system (30-80 particles depending on device)
-- Very subtle glow compositing at low opacity
-- No long lines, no scratch streaks, no persistent webs
-- Clean, minimal, premium aesthetic
-
-**Tuning Intensity:**
-
-Edit `script.js` in the `AdvancedFXPipeline` class:
-
-```javascript
-// Particle opacity (lower = more subtle)
-baseAlpha: Math.random() * 0.2 + 0.15  // default: 0.15-0.35
-
-// Connection line opacity
-const alpha = (1 - Math.sqrt(distSq) / linkDist) * 0.08;  // default: 0.08
-
-// Glow layer opacity
-this.ctx.globalAlpha = 0.12;  // default: 0.12 (lower = more subtle)
-
-// Flow field strength
-const flowStrength = 0.15;  // default: 0.15 (higher = faster drift)
-```
-
-**Performance Tuning:**
-
-```javascript
-// In constructor quality settings:
-this.quality = {
-    dpr: Math.min(window.devicePixelRatio || 1, this.isMobile ? 1.25 : 1.5),
-    particleCount: this.isMobile ? 40 : 75,    // Reduce for better performance
-    maxLines: this.isMobile ? 60 : 100,         // Reduce for better performance
-    enableGlow: !this.isMobile,                 // Disable glow on mobile
-    scale: 1.0
-};
-```
-
-### Performance & Quality Scaling
-
-The pipeline includes adaptive quality scaling that responds to measured frame performance:
-
-**Quality Reduction** (if avg frame time > 18ms for 1 second):
-- Reduces particle count gradually
-- Lowers DPR (device pixel ratio) clamp
-- Reduces maximum line draws
-- Disables glow layer if performance is severely impacted (>25ms)
-
-**Quality Increase** (if avg frame time < 14ms for 2 seconds):
-- Gently increases particle count back to caps
-- Raises DPR up to maximum
-- Increases line draw budget
-- Changes are applied gradually to avoid stuttering
-
-**Mobile Optimizations**:
-- Lower initial particle count (~40 vs ~75 desktop)
-- Lower DPR cap (1.25 vs 1.5 desktop)
-- Glow/distortion layer disabled by default
-- Smaller spatial grid cells
-
-**Tab Visibility**:
-- Animation pauses when tab is hidden
-- Resumes cleanly when tab becomes visible
-- Prevents wasted CPU/battery when not viewing
-
-**Reduced Motion**:
-- Renders one static frame with subset of particles
-- Stops all animation
-- Disables CSS overlay effects
-
-### Tuning Knobs
-
-All tuning parameters are in `script.js` in the `AdvancedFXPipeline` class constructor:
-
-```javascript
-// Quality scaling properties
-this.quality = {
-    dpr: ...,                    // Device pixel ratio clamp
-    particleCount: ...,          // Initial particle count
-    maxLines: ...,               // Maximum connection lines
-    enableGlow: ...,             // Glow layer on/off
-    scale: 1.0                   // Overall quality scale
-};
-
-// Adaptive quality thresholds
-- Frame time > 18ms: reduce quality
-- Frame time < 14ms: increase quality
-- Changes wait 2 seconds between adjustments
-```
-
-**Flow Field**:
-- `gridSize`: 32 (smaller = more detailed field, higher cost)
-- `flowStrength`: 0.15 (higher = faster drift)
-- Update rate: 0.001 per frame
-
-**Spatial Grid**:
-- Cell size: 100 mobile, 140 desktop (affects connection distance)
-
-**Glow Layer**:
-- Scale: 1/3 resolution (higher = more detail, higher cost)
-- Opacity: 0.12 (lower = more subtle)
-
-## Links & Resume
-Update contact targets in `index.html`:
-- GitHub/LinkedIn/Email: Contact buttons
-- Resume: `/resume.pdf` link in Contact (replace with your PDF path)
-- Navbar links: edit anchors in each HTML file (keep Services/Timeline URLs consistent)
-
-## Timeline Console
-- Logs expand/collapse, filters, jumps, focus mode
-- Focus mode lowers background intensity and lines
-- Keyboard: Enter/Space toggles entries; ARIA updated for accordions
-- Mobile: console controls collapse into “Console Controls” toggle
-
-## Responsiveness
-- Breakpoints ~480/768/1024; hamburger nav on small screens
-- Projects grid: 1/2/3 columns (phone/tablet/desktop)
-- Tap targets ≥44px; typography uses `clamp()`
-
-## Reduced Motion
-
-The site fully respects the `prefers-reduced-motion` accessibility setting:
-
-- **Hero Boot Sequence**: Disabled - all content shows immediately without animations
-- **Background Animation**: Stops - renders one static frame
-- **Reveal Animations**: Disabled - content is visible immediately
-- **Timeline Scan Sweep**: Disabled
-- **CSS Overlay Effects**: Disabled
-
-This ensures the site is fully accessible for users who experience discomfort with motion and animations.
-
-## Deployment (GitHub Pages)
-- Serve from repository root (main branch). Custom domain via CNAME if needed.
-
-### Testing
-```bash
-# Check with screen readers:
-# - NVDA (Windows)
-# - JAWS (Windows)
-# - VoiceOver (macOS/iOS)
-```
-
-## Local Development
-
-No build process required! Just open in a browser:
+### 1. Clone the Repository
 
 ```bash
-# Serve locally with Python
-python -m http.server 8000
-
-# Or with Node.js
-npx http-server
-
-# Then visit: http://localhost:8000
+git clone https://github.com/rootuser39/rootuser39.github.io.git
+cd rootuser39.github.io
 ```
 
-## File Structure
+### 2. Install Dependencies
+
+```bash
+npm install
+# or
+yarn install
+# or
+pnpm install
+```
+
+### 3. Run Development Server
+
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) to see your portfolio.
+
+## Customization
+
+### Update Content
+
+All content is defined in seed data within `src/lib/data/index.ts`. Edit these arrays to customize:
+
+- **Projects**: Modify `seedProjects` array
+- **Services**: Modify `seedServices` array
+- **Timeline**: Modify `seedTimelineEntries` array
+
+### Update Personal Information
+
+Edit these components:
+
+- **Hero**: `src/components/home/Hero.tsx`
+- **About**: `src/components/home/About.tsx`
+- **Experience**: `src/components/home/Experience.tsx`
+- **Contact links**: `src/components/home/Contact.tsx`
+
+### Customize Theme
+
+Edit Tailwind config at `tailwind.config.ts`:
+
+```typescript
+colors: {
+  bg: "#050607",
+  surface: "rgba(12, 13, 15, 0.72)",
+  surface2: "rgba(18, 20, 23, 0.62)",
+  border: "rgba(255, 255, 255, 0.10)",
+  text: "#E7E9EE",
+  muted: "#A8AFBC",
+  highlight: "#D7DBE3",
+}
+```
+
+### Add Resume PDF
+
+Place your `resume.pdf` file in the `public` directory:
+
+```bash
+cp /path/to/your/resume.pdf public/resume.pdf
+```
+
+Update the resume link in:
+- `src/components/home/Hero.tsx`
+- `src/components/home/Contact.tsx`
+
+## Supabase Setup (Optional)
+
+If you want to use Supabase as a content source instead of local seed data:
+
+### 1. Create Supabase Project
+
+1. Go to [supabase.com](https://supabase.com)
+2. Create a new project
+3. Get your project URL and anon key
+
+### 2. Set Environment Variables
+
+Create a `.env.local` file:
+
+```bash
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url_here
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key_here
+```
+
+### 3. Create Tables
+
+Run these SQL commands in your Supabase SQL editor:
+
+```sql
+-- Projects table
+CREATE TABLE projects (
+  id TEXT PRIMARY KEY,
+  title TEXT NOT NULL,
+  problem TEXT NOT NULL,
+  build TEXT NOT NULL,
+  outcome TEXT NOT NULL,
+  stack TEXT[] NOT NULL,
+  tags TEXT[] NOT NULL,
+  repo TEXT,
+  demo TEXT
+);
+
+-- Services table
+CREATE TABLE services (
+  id TEXT PRIMARY KEY,
+  title TEXT NOT NULL,
+  "whatYouGet" TEXT[] NOT NULL,
+  deliverable TEXT NOT NULL,
+  tooling TEXT[] NOT NULL
+);
+
+-- Timeline table
+CREATE TABLE timeline (
+  id TEXT PRIMARY KEY,
+  year INTEGER NOT NULL,
+  month TEXT NOT NULL,
+  title TEXT NOT NULL,
+  company TEXT,
+  description TEXT NOT NULL,
+  type TEXT NOT NULL
+);
+
+-- Enable Row Level Security
+ALTER TABLE projects ENABLE ROW LEVEL SECURITY;
+ALTER TABLE services ENABLE ROW LEVEL SECURITY;
+ALTER TABLE timeline ENABLE ROW LEVEL SECURITY;
+
+-- Create policies for public read access
+CREATE POLICY "Public read access" ON projects FOR SELECT USING (true);
+CREATE POLICY "Public read access" ON services FOR SELECT USING (true);
+CREATE POLICY "Public read access" ON timeline FOR SELECT USING (true);
+```
+
+### 4. Populate Data
+
+Insert your content data into the tables via Supabase dashboard or SQL.
+
+## Deployment
+
+### Deploy to Vercel
+
+1. Push your code to GitHub
+2. Go to [vercel.com](https://vercel.com)
+3. Import your GitHub repository
+4. Add environment variables (if using Supabase)
+5. Deploy!
+
+Vercel will automatically:
+- Build your project with `npm run build`
+- Set up automatic deployments for new commits
+- Provide a production URL
+
+### Deploy to GitHub Pages
+
+1. Update `next.config.ts` if needed (already configured for static export)
+2. Build the project:
+
+```bash
+npm run build
+```
+
+3. The static files will be in the `out` directory
+4. Deploy the `out` directory to GitHub Pages
+
+### Custom Domain
+
+#### Vercel
+1. Go to your project settings in Vercel
+2. Navigate to "Domains"
+3. Add your custom domain
+4. Update DNS records as instructed
+
+#### GitHub Pages
+1. Add a `CNAME` file to `public` directory with your domain
+2. Update DNS records:
+   - Add A records pointing to GitHub Pages IPs
+   - Or CNAME record pointing to `username.github.io`
+3. Enable custom domain in repository settings
+
+## Project Structure
 
 ```
 .
-├── index.html       # Main portfolio page
-├── timeline.html    # Timeline/console page
-├── styles.css       # All styles (18KB)
-├── script.js        # Canvas engine + UI logic (24KB)
-├── README.md        # This file
-└── CNAME            # Custom domain (optional)
+├── public/              # Static assets (resume.pdf, etc.)
+├── src/
+│   ├── app/            # Next.js App Router pages
+│   │   ├── layout.tsx  # Root layout with navigation
+│   │   ├── page.tsx    # Home page
+│   │   ├── projects/   # Projects page
+│   │   ├── services/   # Services page
+│   │   └── timeline/   # Timeline page
+│   ├── components/     # React components
+│   │   ├── home/       # Home page sections
+│   │   ├── Background.tsx
+│   │   ├── Navigation.tsx
+│   │   ├── BackToTop.tsx
+│   │   └── PageTransition.tsx
+│   ├── lib/
+│   │   ├── data/       # Data access layer with seed data
+│   │   ├── query/      # TanStack Query setup
+│   │   └── supabase/   # Supabase client config
+│   └── types/          # TypeScript types
+├── tailwind.config.ts  # Tailwind configuration
+├── next.config.ts      # Next.js configuration
+└── package.json
 ```
 
-## Credits
+## Accessibility
 
-**Design Philosophy**: Heavy infrastructure command console aesthetic with enterprise-grade performance.
+This portfolio is built with accessibility in mind:
 
-**No External Resources**: All graphics, animations, and interactions are generated in-browser.
+- **Keyboard Navigation**: All interactive elements are keyboard accessible
+- **Reduced Motion**: Respects `prefers-reduced-motion` setting
+- **ARIA Labels**: Proper ARIA labels for screen readers
+- **Semantic HTML**: Uses semantic HTML elements
+- **Color Contrast**: Meets WCAG AA standards
+- **Focus Indicators**: Clear focus states for keyboard navigation
+
+## Performance
+
+- **Server Components**: Most components are server-rendered by default
+- **Minimal JavaScript**: Only client components that need interactivity use JS
+- **Optimized Images**: Next.js Image optimization (when using images)
+- **Code Splitting**: Automatic code splitting by route
+- **Static Export**: Pre-rendered pages for instant load times
+
+## Browser Support
+
+- Chrome (latest)
+- Firefox (latest)
+- Safari (latest)
+- Edge (latest)
+
+## Scripts
+
+```bash
+# Development
+npm run dev          # Start development server
+
+# Production
+npm run build        # Build for production (static export)
+npm run start        # Start production server (not needed for static)
+
+# Code Quality
+npm run lint         # Run ESLint
+```
 
 ## License
 
-This portfolio template is provided as-is for personal use. Customize freely for your own portfolio.
+This portfolio template is provided for personal use. Customize freely for your own portfolio.
+
+## Credits
+
+**Built by Rishabh Durugkar** | Infrastructure · Networking · Security
+
+**Stack**: Next.js 15, React 19, TypeScript, Tailwind CSS, Framer Motion, TanStack Query, Supabase
 
 ---
 
-**Built by Rishabh Durugkar** | Infrastructure · Networking · Security
+For questions or support, reach out via the contact links in the portfolio.
