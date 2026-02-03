@@ -1,46 +1,6 @@
 // Check if user prefers reduced motion
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-// Operator Slide Line - Rotating Text
-const operatorLines = [
-    'Reliability under failure and scale.',
-    'Network automation and change safety.',
-    'AI-ready infrastructure design.',
-    'Security as an engineered system.'
-];
-
-let currentLineIndex = 0;
-const operatorTextElement = document.getElementById('operator-text');
-
-function rotateOperatorLine() {
-    if (prefersReducedMotion) {
-        // If reduced motion is preferred, just show the first line without animation
-        return;
-    }
-
-    // Fade out
-    operatorTextElement.style.opacity = '0';
-    operatorTextElement.style.transform = 'translateY(10px)';
-
-    setTimeout(() => {
-        // Change text
-        currentLineIndex = (currentLineIndex + 1) % operatorLines.length;
-        operatorTextElement.textContent = operatorLines[currentLineIndex];
-
-        // Trigger reflow
-        operatorTextElement.offsetHeight;
-
-        // Fade in
-        operatorTextElement.style.opacity = '1';
-        operatorTextElement.style.transform = 'translateY(0)';
-    }, 600);
-}
-
-// Start rotation after initial display, every 4 seconds
-if (!prefersReducedMotion) {
-    setInterval(rotateOperatorLine, 4000);
-}
-
 // Background Animation - Subtle Particle Drift
 const canvas = document.getElementById('background-canvas');
 const ctx = canvas.getContext('2d');
