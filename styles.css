@@ -501,7 +501,7 @@ body:not([data-booted]) .chip-row:nth-child(3) {
 }
 
 body:not([data-booted]) .scroll-cue {
-    animation: fadeIn 0.5s ease-out 2.4s forwards, bounceOnce 1.5s ease-in-out 2.9s 1;
+    animation: fadeIn 0.5s ease-out 2.4s forwards, bounceOnce 1.5s ease-in-out 2.9s;
 }
 
 /* Booted state - show everything immediately */

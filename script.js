@@ -843,9 +843,9 @@
                 return;
             }
             
-            // Mark as booted after animation completes
-            // Total animation: ~2.6s (scanline 1.8s + last chip 2.1s + scroll cue 2.4s + bounce 1.5s = ~4.5s total)
-            // We mark it booted at 2.6s to allow animations to complete
+            // Mark as booted after main intro sequence completes (2.6s)
+            // This allows the core intro animations to finish (scanline + all content reveals)
+            // The scroll cue bounce (2.4s start + 1.5s duration) continues independently
             setTimeout(() => {
                 document.body.setAttribute('data-booted', 'true');
                 sessionStorage.setItem('heroBooted', 'true');
