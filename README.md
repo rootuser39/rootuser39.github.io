@@ -14,12 +14,61 @@ The homepage features a minimal, premium "Operator Brief" layout with a 2-column
 ### Layout Structure
 
 **Desktop:**
-- Left column (60-65%): Name, role, value statement, and 2 CTAs
+- Left column (60-65%): Name, role, value statement, rotating Operator Brief slideshow, and 2 CTAs
 - Right column (35-40%): "Ops Brief" glass card with key professional details
 
 **Mobile:**
 - Columns stack vertically
 - Ops Brief card appears below CTAs
+
+### Operator Brief Slideshow
+
+Below the value statement, a micro-slideshow displays 4 rotating "modes" showcasing different areas of expertise:
+
+**Slide Structure:**
+Each slide has:
+- Mode badge (e.g., "MODE 01")
+- Headline (one line)
+- Description line (one line)
+
+**Default Slides:**
+1. **MODE 01 — Reliability**: "Reliability under load." / "Incident response → RCA → permanent fixes and guardrails."
+2. **MODE 02 — Automation**: "Change safety and speed." / "Validation, drift detection, and repeatable workflows."
+3. **MODE 03 — AI-ready Infrastructure**: "AI-ready system readiness." / "GPU/network/storage correlation and bottleneck diagnosis."
+4. **MODE 04 — Security**: "Security as a system." / "Segmentation, policy enforcement, and detection signals."
+
+**Editing Slides:**
+Modify slides in `index.html` within the `.operator-brief-module`:
+
+```html
+<div class="operator-brief-slide" data-mode="1">
+    <h3 class="operator-brief-headline">Your headline here</h3>
+    <p class="operator-brief-line">Your description line here</p>
+</div>
+```
+
+**Changing Timing:**
+Edit `script.js` in the `OperatorBrief` class constructor:
+
+```javascript
+// Random timing between 3.8-4.5 seconds (default)
+this.getRandomInterval = () => 3800 + Math.random() * 700;
+
+// For fixed timing (e.g., 4 seconds):
+this.getRandomInterval = () => 4000;
+
+// For different range (e.g., 5-6 seconds):
+this.getRandomInterval = () => 5000 + Math.random() * 1000;
+```
+
+**Behavior:**
+- Auto-rotates with randomized timing (3.8-4.5s by default)
+- Smooth slide-up + fade transition
+- 4 progress dots at bottom (clickable)
+- Pauses on hover/focus
+- Resumes after 8s idle
+- Fully accessible with ARIA labels
+- Respects `prefers-reduced-motion`: shows only first slide with no animation
 
 ### Micro-Motion Animation
 
@@ -71,7 +120,7 @@ Place your `resume.pdf` file in the repository root, or update the path to match
 
 ## Advanced Background FX Pipeline
 
-The site features a modular, high-performance FX pipeline with 4 layers that work together to create an advanced but subtle background effect:
+The site features a modular, high-performance FX pipeline with 4 layers that work together to create a clean, exotic "Ion Field" background effect:
 
 ### FX Layers
 
@@ -81,7 +130,47 @@ The site features a modular, high-performance FX pipeline with 4 layers that wor
 
 3. **Low-res Distortion/Glow Layer**: 1/3 scale buffer creating faint metaball-like glow blobs, composited to main canvas with very low opacity. Automatically disabled on mobile devices.
 
-4. **CSS Overlay Layer**: Subtle scanline and noise effects using pure CSS gradients (no external images). Automatically disabled in reduced-motion mode.
+4. **CSS Overlay Layer**: Subtle scanline effects using pure CSS gradients (no external images, no diagonal scratches). Automatically disabled in reduced-motion mode.
+
+### Background Modes
+
+The background implements the **Ion Field** mode:
+- Low-resolution plasma/flow field with pseudo-noise
+- Sparse particle system (30-80 particles depending on device)
+- Very subtle glow compositing at low opacity
+- No long lines, no scratch streaks, no persistent webs
+- Clean, minimal, premium aesthetic
+
+**Tuning Intensity:**
+
+Edit `script.js` in the `AdvancedFXPipeline` class:
+
+```javascript
+// Particle opacity (lower = more subtle)
+baseAlpha: Math.random() * 0.2 + 0.15  // default: 0.15-0.35
+
+// Connection line opacity
+const alpha = (1 - Math.sqrt(distSq) / linkDist) * 0.08;  // default: 0.08
+
+// Glow layer opacity
+this.ctx.globalAlpha = 0.12;  // default: 0.12 (lower = more subtle)
+
+// Flow field strength
+const flowStrength = 0.15;  // default: 0.15 (higher = faster drift)
+```
+
+**Performance Tuning:**
+
+```javascript
+// In constructor quality settings:
+this.quality = {
+    dpr: Math.min(window.devicePixelRatio || 1, this.isMobile ? 1.25 : 1.5),
+    particleCount: this.isMobile ? 40 : 75,    // Reduce for better performance
+    maxLines: this.isMobile ? 60 : 100,         // Reduce for better performance
+    enableGlow: !this.isMobile,                 // Disable glow on mobile
+    scale: 1.0
+};
+```
 
 ### Performance & Quality Scaling
 

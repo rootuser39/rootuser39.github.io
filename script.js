@@ -615,6 +615,135 @@
         }
     }
     
+    // ==================== OPERATOR BRIEF SLIDESHOW ====================
+    
+    class OperatorBrief {
+        constructor() {
+            this.module = document.querySelector('.operator-brief-module');
+            if (!this.module) return;
+            
+            this.isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            
+            // Don't start slideshow if reduced motion is preferred
+            if (this.isReducedMotion) {
+                // Show only first slide
+                const firstSlide = this.module.querySelector('.operator-brief-slide');
+                if (firstSlide) firstSlide.classList.add('active');
+                return;
+            }
+            
+            this.slides = Array.from(this.module.querySelectorAll('.operator-brief-slide'));
+            this.dots = Array.from(this.module.querySelectorAll('.progress-dot'));
+            this.modeIndicator = document.getElementById('operatorMode');
+            this.currentSlide = 0;
+            this.isHovered = false;
+            this.isPaused = false;
+            this.idleTimeout = null;
+            this.autoRotateInterval = null;
+            
+            // Random timing between 3.8-4.5 seconds
+            this.getRandomInterval = () => 3800 + Math.random() * 700;
+            
+            this.init();
+        }
+        
+        init() {
+            // Set initial state
+            this.showSlide(0);
+            
+            // Set up dot click handlers
+            this.dots.forEach((dot, index) => {
+                dot.addEventListener('click', () => {
+                    this.goToSlide(index);
+                    this.pauseRotation();
+                    this.scheduleResume();
+                });
+            });
+            
+            // Pause on hover/focus
+            this.module.addEventListener('mouseenter', () => {
+                this.isHovered = true;
+                this.pauseRotation();
+            });
+            
+            this.module.addEventListener('mouseleave', () => {
+                this.isHovered = false;
+                this.scheduleResume();
+            });
+            
+            this.module.addEventListener('focusin', () => {
+                this.pauseRotation();
+            });
+            
+            this.module.addEventListener('focusout', () => {
+                if (!this.isHovered) {
+                    this.scheduleResume();
+                }
+            });
+            
+            // Start auto-rotation
+            this.startRotation();
+        }
+        
+        showSlide(index) {
+            // Remove active from all slides and dots
+            this.slides.forEach(slide => slide.classList.remove('active'));
+            this.dots.forEach(dot => {
+                dot.classList.remove('active');
+                dot.setAttribute('aria-selected', 'false');
+            });
+            
+            // Add active to current
+            this.slides[index].classList.add('active');
+            this.dots[index].classList.add('active');
+            this.dots[index].setAttribute('aria-selected', 'true');
+            
+            // Update mode indicator
+            const mode = this.slides[index].dataset.mode;
+            if (this.modeIndicator) {
+                this.modeIndicator.textContent = `MODE 0${mode}`;
+            }
+            
+            this.currentSlide = index;
+        }
+        
+        goToSlide(index) {
+            if (index === this.currentSlide) return;
+            this.showSlide(index);
+        }
+        
+        nextSlide() {
+            const next = (this.currentSlide + 1) % this.slides.length;
+            this.showSlide(next);
+        }
+        
+        startRotation() {
+            if (this.autoRotateInterval) return;
+            this.autoRotateInterval = setInterval(() => {
+                if (!this.isPaused) {
+                    this.nextSlide();
+                }
+            }, this.getRandomInterval());
+        }
+        
+        pauseRotation() {
+            this.isPaused = true;
+            if (this.idleTimeout) {
+                clearTimeout(this.idleTimeout);
+                this.idleTimeout = null;
+            }
+        }
+        
+        scheduleResume() {
+            if (this.idleTimeout) {
+                clearTimeout(this.idleTimeout);
+            }
+            this.idleTimeout = setTimeout(() => {
+                this.isPaused = false;
+            }, 8000); // Resume after 8s idle
+        }
+    }
+    
     // ==================== TIMELINE PAGE ====================
     
     class TimelinePage {
@@ -840,6 +969,9 @@
         
         // Back to top
         new BackToTop();
+        
+        // Operator Brief slideshow
+        new OperatorBrief();
         
         // Timeline page
         new TimelinePage();
