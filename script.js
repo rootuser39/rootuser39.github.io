@@ -658,6 +658,16 @@
                     this.pauseRotation();
                     this.scheduleResume();
                 });
+                
+                // Keyboard support for accessibility
+                dot.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        this.goToSlide(index);
+                        this.pauseRotation();
+                        this.scheduleResume();
+                    }
+                });
             });
             
             // Pause on hover/focus
@@ -719,15 +729,25 @@
         
         startRotation() {
             if (this.autoRotateInterval) return;
-            this.autoRotateInterval = setInterval(() => {
-                if (!this.isPaused) {
-                    this.nextSlide();
-                }
-            }, this.getRandomInterval());
+            
+            const scheduleNext = () => {
+                this.autoRotateInterval = setTimeout(() => {
+                    if (!this.isPaused) {
+                        this.nextSlide();
+                    }
+                    scheduleNext();
+                }, this.getRandomInterval());
+            };
+            
+            scheduleNext();
         }
         
         pauseRotation() {
             this.isPaused = true;
+            if (this.autoRotateInterval) {
+                clearTimeout(this.autoRotateInterval);
+                this.autoRotateInterval = null;
+            }
             if (this.idleTimeout) {
                 clearTimeout(this.idleTimeout);
                 this.idleTimeout = null;
@@ -740,6 +760,7 @@
             }
             this.idleTimeout = setTimeout(() => {
                 this.isPaused = false;
+                this.startRotation();
             }, 8000); // Resume after 8s idle
         }
     }
