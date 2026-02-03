@@ -826,6 +826,33 @@
         }
     }
     
+    // ==================== HERO BOOT SEQUENCE ====================
+    
+    class HeroBootSequence {
+        constructor() {
+            this.isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            this.hasBooted = sessionStorage.getItem('heroBooted') === 'true';
+            
+            this.init();
+        }
+        
+        init() {
+            // If reduced motion or already booted, skip animation
+            if (this.isReducedMotion || this.hasBooted) {
+                document.body.setAttribute('data-booted', 'true');
+                return;
+            }
+            
+            // Mark as booted after main intro sequence completes (2.6s)
+            // This allows the core intro animations to finish (scanline + all content reveals)
+            // The scroll cue bounce (2.4s start + 1.5s duration) continues independently
+            setTimeout(() => {
+                document.body.setAttribute('data-booted', 'true');
+                sessionStorage.setItem('heroBooted', 'true');
+            }, 2600);
+        }
+    }
+    
     // ==================== INITIALIZE ====================
     
     function init() {
@@ -843,6 +870,9 @@
         
         // Timeline page
         new TimelinePage();
+        
+        // Hero boot sequence
+        new HeroBootSequence();
     }
     
     // Wait for DOM
