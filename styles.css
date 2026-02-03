@@ -225,299 +225,186 @@ body::before {
     display: flex;
     align-items: center;
     justify-content: center;
-    text-align: center;
     padding: 4rem 2rem;
     position: relative;
 }
 
+/* Radial vignette overlay to reduce background intensity */
+.hero-section::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+        ellipse 800px 600px at center,
+        transparent 0%,
+        rgba(5, 6, 7, 0.4) 50%,
+        rgba(5, 6, 7, 0.7) 100%
+    );
+    pointer-events: none;
+    z-index: 0;
+}
+
 .hero-container {
-    max-width: 900px;
+    max-width: 1200px;
+    width: 100%;
     position: relative;
+    z-index: 1;
+}
+
+.hero-grid {
+    display: grid;
+    grid-template-columns: 1fr 0.6fr;
+    gap: 4rem;
+    align-items: center;
+}
+
+.hero-left {
+    text-align: left;
+}
+
+.hero-right {
+    display: flex;
+    justify-content: flex-end;
 }
 
 /* Hero Name */
 .hero-name {
-    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-size: clamp(2.5rem, 6vw, 3.5rem);
     font-weight: 700;
     letter-spacing: -0.04em;
-    margin-bottom: 0.75rem;
+    margin-bottom: 1rem;
     color: var(--highlight);
-    opacity: 0;
-    transform: translateY(20px);
+    line-height: 1.1;
 }
 
 /* Hero Title (Role) */
 .hero-title {
-    font-size: clamp(1.5rem, 3.5vw, 2.5rem);
-    font-weight: 600;
-    letter-spacing: -0.03em;
+    font-size: clamp(1.25rem, 3vw, 1.75rem);
+    font-weight: 500;
+    letter-spacing: -0.01em;
     margin-bottom: 1.5rem;
-    color: var(--text);
-    opacity: 0;
-    transform: translateY(20px);
+    color: var(--muted);
+    line-height: 1.3;
 }
 
 /* Hero Value Statement */
 .hero-value {
-    font-size: clamp(1rem, 2vw, 1.25rem);
+    font-size: clamp(1rem, 2vw, 1.125rem);
     color: var(--muted);
-    max-width: 700px;
-    margin: 0 auto 2rem;
-    line-height: 1.6;
-    opacity: 0;
-    transform: translateY(20px);
+    max-width: 600px;
+    margin-bottom: 2.5rem;
+    line-height: 1.7;
 }
 
-/* System Status Bar */
-.system-status {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 2rem;
-    margin-bottom: 2rem;
-    padding: 0.75rem 1.5rem;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    font-family: 'Courier New', monospace;
-    font-size: 0.85rem;
-    opacity: 0;
-    max-width: fit-content;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.status-item {
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
-}
-
-.status-label {
-    color: var(--muted);
-    font-weight: 600;
-}
-
-.status-value {
-    color: var(--highlight);
-    font-weight: 700;
-}
+/* Remove old system status styles */
 
 /* Hero CTAs */
 .hero-ctas {
     display: flex;
     gap: 1rem;
-    justify-content: center;
-    margin-bottom: 2.5rem;
+    margin-bottom: 0;
     flex-wrap: wrap;
 }
 
 .hero-cta {
-    padding: 0.875rem 2rem;
-    border-radius: 8px;
+    padding: 0.75rem 1.75rem;
+    border-radius: 6px;
     text-decoration: none;
-    font-size: 1rem;
-    font-weight: 600;
-    transition: all 0.3s ease;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: all 0.25s ease;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-width: 160px;
-    opacity: 0;
-    transform: translateY(20px);
+    letter-spacing: -0.01em;
 }
 
 .hero-cta-primary {
-    background: rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.08);
     border: 1px solid rgba(255, 255, 255, 0.2);
     color: var(--highlight);
 }
 
 .hero-cta-primary:hover {
-    background: rgba(255, 255, 255, 0.18);
+    background: rgba(255, 255, 255, 0.14);
     border-color: rgba(255, 255, 255, 0.3);
-    transform: translateY(-2px);
+    transform: translateY(-1px);
 }
 
 .hero-cta-secondary {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    color: var(--text);
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: var(--muted);
 }
 
 .hero-cta-secondary:hover {
-    background: var(--surface2);
-    border-color: rgba(255, 255, 255, 0.2);
-    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.25);
+    color: var(--text);
+    transform: translateY(-1px);
 }
 
-/* Hero Chips */
-.hero-chips {
+/* Ops Brief Card */
+.ops-brief-card {
+    background: rgba(12, 13, 15, 0.6);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    padding: 1.75rem;
+    max-width: 400px;
+    width: 100%;
+}
+
+.ops-brief-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--highlight);
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.ops-brief-content {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
-    align-items: center;
-    margin-bottom: 3rem;
+    gap: 1rem;
 }
 
-.chip-row {
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
-    flex-wrap: wrap;
-    justify-content: center;
-    opacity: 0;
-    transform: translateY(10px);
-}
-
-.chip {
-    padding: 0.4rem 0.9rem;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    font-size: 0.85rem;
+.ops-brief-content p {
+    font-size: 0.9rem;
+    line-height: 1.6;
     color: var(--muted);
-    white-space: nowrap;
+    margin: 0;
 }
 
-.chip-separator {
-    color: var(--muted);
-    opacity: 0.5;
+.ops-brief-content strong {
+    color: var(--text);
+    font-weight: 600;
 }
 
-/* Scroll Cue */
-.scroll-cue {
-    position: absolute;
-    bottom: 2rem;
-    left: 50%;
-    transform: translateX(-50%);
-    color: var(--muted);
-    opacity: 0;
-    animation: none;
-}
-
-.scroll-cue svg {
-    display: block;
-}
-
-/* Boot Sequence Animations */
-@keyframes scanlineSweep {
-    0% {
-        transform: translateY(-100%);
-        opacity: 0;
-    }
-    10% {
-        opacity: 1;
-    }
-    90% {
-        opacity: 1;
-    }
-    100% {
-        transform: translateY(100vh);
-        opacity: 0;
-    }
-}
-
+/* Micro-motion Animations */
 @keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
     to {
         opacity: 1;
         transform: translateY(0);
     }
 }
 
-@keyframes fadeIn {
-    to {
-        opacity: 1;
-    }
+/* Hero entrance animation */
+.hero-grid {
+    animation: fadeInUp 350ms ease-out forwards;
 }
 
-@keyframes bounceOnce {
-    0%, 100% {
-        transform: translateX(-50%) translateY(0);
-    }
-    50% {
-        transform: translateX(-50%) translateY(-10px);
-    }
-}
-
-/* Scanline Effect Layer */
+/* Remove scanline effect */
 .hero-section::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 200px;
-    background: linear-gradient(
-        180deg,
-        transparent 0%,
-        rgba(231, 233, 238, 0.1) 50%,
-        transparent 100%
-    );
-    pointer-events: none;
-    opacity: 0;
-    z-index: 1;
-}
-
-/* Boot sequence active state */
-body:not([data-booted]) .hero-section::before {
-    animation: scanlineSweep 1.8s ease-out forwards;
-}
-
-body:not([data-booted]) .hero-name {
-    animation: fadeInUp 0.6s ease-out 0.3s forwards;
-}
-
-body:not([data-booted]) .hero-title {
-    animation: fadeInUp 0.6s ease-out 0.5s forwards;
-}
-
-body:not([data-booted]) .hero-value {
-    animation: fadeInUp 0.6s ease-out 0.7s forwards;
-}
-
-body:not([data-booted]) .system-status {
-    animation: fadeIn 0.5s ease-out 1.2s forwards;
-}
-
-body:not([data-booted]) .hero-cta:nth-child(1) {
-    animation: fadeInUp 0.5s ease-out 1.5s forwards;
-}
-
-body:not([data-booted]) .hero-cta:nth-child(2) {
-    animation: fadeInUp 0.5s ease-out 1.65s forwards;
-}
-
-body:not([data-booted]) .chip-row:nth-child(1) {
-    animation: fadeInUp 0.4s ease-out 1.9s forwards;
-}
-
-body:not([data-booted]) .chip-row:nth-child(2) {
-    animation: fadeInUp 0.4s ease-out 2.0s forwards;
-}
-
-body:not([data-booted]) .chip-row:nth-child(3) {
-    animation: fadeInUp 0.4s ease-out 2.1s forwards;
-}
-
-body:not([data-booted]) .scroll-cue {
-    animation: fadeIn 0.5s ease-out 2.4s forwards, bounceOnce 1.5s ease-in-out 2.9s;
-}
-
-/* Booted state - show everything immediately */
-body[data-booted] .hero-name,
-body[data-booted] .hero-title,
-body[data-booted] .hero-value,
-body[data-booted] .system-status,
-body[data-booted] .hero-cta,
-body[data-booted] .chip-row,
-body[data-booted] .scroll-cue {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-body[data-booted] .scroll-cue {
-    transform: translateX(-50%) translateY(0);
+    display: none;
 }
 
 .hero-subtitle {
@@ -1435,6 +1322,20 @@ body.focus-mode .timeline-entry {
         min-height: calc(100vh - var(--nav-height) - 4rem);
     }
     
+    /* Stack hero columns on mobile */
+    .hero-grid {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+    }
+    
+    .hero-right {
+        justify-content: center;
+    }
+    
+    .ops-brief-card {
+        max-width: 100%;
+    }
+    
     .hero-ctas {
         flex-direction: column;
         gap: 0.75rem;
@@ -1443,26 +1344,6 @@ body.focus-mode .timeline-entry {
     .hero-cta {
         width: 100%;
         max-width: 300px;
-    }
-    
-    .system-status {
-        flex-direction: column;
-        gap: 0.75rem;
-        padding: 1rem;
-        font-size: 0.8rem;
-    }
-    
-    .chip-row {
-        font-size: 0.8rem;
-    }
-    
-    .chip {
-        font-size: 0.8rem;
-        padding: 0.35rem 0.75rem;
-    }
-    
-    .scroll-cue {
-        bottom: 1rem;
     }
     
     .projects-grid {
@@ -1531,19 +1412,11 @@ body.focus-mode .timeline-entry {
     }
     
     /* Show hero content immediately without animations */
-    .hero-name,
-    .hero-title,
-    .hero-value,
-    .system-status,
-    .hero-cta,
-    .chip-row,
-    .scroll-cue {
-        opacity: 1 !important;
-        transform: none !important;
+    .hero-grid {
         animation: none !important;
     }
     
-    /* Disable scanline */
+    /* Disable scanline (already removed but double check) */
     .hero-section::before {
         display: none !important;
     }
