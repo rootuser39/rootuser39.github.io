@@ -7,46 +7,57 @@ Emperor black/grey portfolio for infrastructure, networking, and security engine
 - `timeline.html` — console-style timeline
 - `services.html` — services overview
 
-## Hero Boot Sequence
+## Hero Section
 
-The homepage features a one-time cinematic "boot sequence" intro that runs on first page load:
+The homepage features a minimal, premium "Operator Brief" layout with a 2-column asymmetric design:
 
-### Features
-- **Scanline Sweep**: Subtle gradient animation sweeps down over the hero section (1.8s)
-- **Staggered Reveals**: Name, title, value statement, system status bar, CTAs, and chips fade in with precise timing
-- **System Status Bar**: Shows "STATUS: ONLINE", "FABRIC: STABLE", "DEFENSE: ARMED"
-- **Scroll Cue**: Down arrow bounces once after intro completes
-- **One-Time Only**: Uses `sessionStorage` to prevent replay on page refresh
-- **Reduced Motion**: Respects `prefers-reduced-motion` - shows final state immediately without animations
+### Layout Structure
+
+**Desktop:**
+- Left column (60-65%): Name, role, value statement, and 2 CTAs
+- Right column (35-40%): "Ops Brief" glass card with key professional details
+
+**Mobile:**
+- Columns stack vertically
+- Ops Brief card appears below CTAs
+
+### Micro-Motion Animation
+
+On page load, the hero content fades in with a subtle upward translate (350ms). This animation is automatically disabled for users who prefer reduced motion.
 
 ### Editing Hero Content
 
 All hero content is in `index.html` within the `.hero-section`:
 
 ```html
-<!-- Large name -->
-<h1 class="hero-name">Rishabh Durugkar</h1>
-
-<!-- Role headline -->
-<h2 class="hero-title">Infrastructure · Networking · Security Engineer</h2>
-
-<!-- Value statement -->
-<p class="hero-value">I build reliable, observable infrastructure...</p>
-
-<!-- System status (edit values) -->
-<div class="system-status">
-    <span class="status-item">...</span>
+<!-- Left column: Main content -->
+<div class="hero-left">
+    <!-- Large name -->
+    <h1 class="hero-name">Rishabh Durugkar</h1>
+    
+    <!-- Role headline (use / separators) -->
+    <h2 class="hero-title">Infrastructure / Networking / Security</h2>
+    
+    <!-- One-line value statement -->
+    <p class="hero-value">Reliability, automation, and observability for AI-ready environments.</p>
+    
+    <!-- CTAs -->
+    <div class="hero-ctas">
+        <a href="#projects" class="hero-cta hero-cta-primary">View Projects</a>
+        <a href="/resume.pdf" class="hero-cta hero-cta-secondary">Download Resume</a>
+    </div>
 </div>
 
-<!-- CTAs -->
-<div class="hero-ctas">
-    <a href="#projects" class="hero-cta hero-cta-primary">View Projects</a>
-    <a href="/resume.pdf" class="hero-cta hero-cta-secondary">Download Resume</a>
-</div>
-
-<!-- Skill chips (3 rows) -->
-<div class="hero-chips">
-    <div class="chip-row">...</div>
+<!-- Right column: Ops Brief card -->
+<div class="hero-right">
+    <div class="ops-brief-card">
+        <h3 class="ops-brief-title">Ops Brief</h3>
+        <div class="ops-brief-content">
+            <p><strong>Focus:</strong> Your focus area</p>
+            <p><strong>Background:</strong> Your background</p>
+            <p><strong>Current:</strong> Current certifications/work</p>
+        </div>
+    </div>
 </div>
 ```
 
