@@ -826,6 +826,33 @@
         }
     }
     
+    // ==================== HERO BOOT SEQUENCE ====================
+    
+    class HeroBootSequence {
+        constructor() {
+            this.isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            this.hasBooted = sessionStorage.getItem('heroBooted') === 'true';
+            
+            this.init();
+        }
+        
+        init() {
+            // If reduced motion or already booted, skip animation
+            if (this.isReducedMotion || this.hasBooted) {
+                document.body.setAttribute('data-booted', 'true');
+                return;
+            }
+            
+            // Mark as booted after animation completes
+            // Total animation: ~2.6s (scanline 1.8s + last chip 2.1s + scroll cue 2.4s + bounce 1.5s = ~4.5s total)
+            // We mark it booted at 2.6s to allow animations to complete
+            setTimeout(() => {
+                document.body.setAttribute('data-booted', 'true');
+                sessionStorage.setItem('heroBooted', 'true');
+            }, 2600);
+        }
+    }
+    
     // ==================== INITIALIZE ====================
     
     function init() {
@@ -843,6 +870,9 @@
         
         // Timeline page
         new TimelinePage();
+        
+        // Hero boot sequence
+        new HeroBootSequence();
     }
     
     // Wait for DOM

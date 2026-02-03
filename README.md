@@ -3,9 +3,60 @@
 Emperor black/grey portfolio for infrastructure, networking, and security engineering. Pure HTML/CSS/JS—no frameworks or external assets.
 
 ## Pages
-- `index.html` — main portfolio
+- `index.html` — main portfolio with hero boot sequence
 - `timeline.html` — console-style timeline
 - `services.html` — services overview
+
+## Hero Boot Sequence
+
+The homepage features a one-time cinematic "boot sequence" intro that runs on first page load:
+
+### Features
+- **Scanline Sweep**: Subtle gradient animation sweeps down over the hero section (1.8s)
+- **Staggered Reveals**: Name, title, value statement, system status bar, CTAs, and chips fade in with precise timing
+- **System Status Bar**: Shows "STATUS: ONLINE", "FABRIC: STABLE", "DEFENSE: ARMED"
+- **Scroll Cue**: Down arrow bounces once after intro completes
+- **One-Time Only**: Uses `sessionStorage` to prevent replay on page refresh
+- **Reduced Motion**: Respects `prefers-reduced-motion` - shows final state immediately without animations
+
+### Editing Hero Content
+
+All hero content is in `index.html` within the `.hero-section`:
+
+```html
+<!-- Large name -->
+<h1 class="hero-name">Rishabh Durugkar</h1>
+
+<!-- Role headline -->
+<h2 class="hero-title">Infrastructure · Networking · Security Engineer</h2>
+
+<!-- Value statement -->
+<p class="hero-value">I build reliable, observable infrastructure...</p>
+
+<!-- System status (edit values) -->
+<div class="system-status">
+    <span class="status-item">...</span>
+</div>
+
+<!-- CTAs -->
+<div class="hero-ctas">
+    <a href="#projects" class="hero-cta hero-cta-primary">View Projects</a>
+    <a href="/resume.pdf" class="hero-cta hero-cta-secondary">Download Resume</a>
+</div>
+
+<!-- Skill chips (3 rows) -->
+<div class="hero-chips">
+    <div class="chip-row">...</div>
+</div>
+```
+
+### Resume Link
+
+Update the resume link in two places:
+1. Hero section: `<a href="/resume.pdf"...>` in `.hero-ctas`
+2. Contact section: `<a href="/resume.pdf"...>` in contact buttons
+
+Place your `resume.pdf` file in the repository root, or update the path to match your file location.
 
 ## Advanced Background FX Pipeline
 
@@ -103,8 +154,16 @@ Update contact targets in `index.html`:
 - Tap targets ≥44px; typography uses `clamp()`
 
 ## Reduced Motion
-- Background animation stops; reveal animations disabled
-- Timeline scan sweep disabled
+
+The site fully respects the `prefers-reduced-motion` accessibility setting:
+
+- **Hero Boot Sequence**: Disabled - all content shows immediately without animations
+- **Background Animation**: Stops - renders one static frame
+- **Reveal Animations**: Disabled - content is visible immediately
+- **Timeline Scan Sweep**: Disabled
+- **CSS Overlay Effects**: Disabled
+
+This ensures the site is fully accessible for users who experience discomfort with motion and animations.
 
 ## Deployment (GitHub Pages)
 - Serve from repository root (main branch). Custom domain via CNAME if needed.
