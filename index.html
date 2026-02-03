@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Rishabh Durugkar - Infrastructure, Networking, and Security Engineer. Designing reliable, observable, and automated systems for modern infrastructure.">
+    <title>Rishabh Durugkar | Infrastructure Engineer</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Background Animation Container -->
+    <canvas id="background-canvas" aria-hidden="true"></canvas>
+    
+    <main>
+        <!-- Hero Section -->
+        <section class="hero" id="hero">
+            <div class="container">
+                <h1 class="hero-name">Rishabh Durugkar</h1>
+                <p class="hero-role">Infrastructure · Networking · Security Engineer</p>
+                <p class="hero-tagline">Designing reliable, observable, and automated systems for modern infrastructure.</p>
+                
+                <!-- Operator Slide Line -->
+                <div class="operator-line" aria-live="polite">
+                    <span class="operator-text" id="operator-text">Reliability under failure and scale.</span>
+                </div>
+                
+                <!-- CTA Buttons -->
+                <div class="hero-actions">
+                    <a href="#projects" class="btn btn-primary">View Projects</a>
+                    <a href="resume.pdf" class="btn btn-secondary" download>Download Resume</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section class="section" id="about">
+            <div class="container">
+                <h2 class="section-title">About</h2>
+                <div class="section-content">
+                    <p>I'm an infrastructure engineer specializing in building reliable, scalable systems that operate efficiently under pressure. My work focuses on network automation, security engineering, and designing infrastructure that's both observable and resilient.</p>
+                    <p>With deep expertise in modern cloud platforms, networking protocols, and security frameworks, I architect solutions that balance performance, reliability, and operational simplicity. I believe in automation as a force multiplier and infrastructure as code as the foundation of reproducible systems.</p>
+                    <p>My approach combines rigorous engineering discipline with pragmatic problem-solving, always prioritizing system reliability and team productivity.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Experience Section -->
+        <section class="section" id="experience">
+            <div class="container">
+                <h2 class="section-title">Experience</h2>
+                <div class="section-content">
+                    
+                    <div class="experience-item">
+                        <div class="experience-header">
+                            <h3>Senior Infrastructure Engineer</h3>
+                            <span class="experience-date">2022 - Present</span>
+                        </div>
+                        <p class="experience-company">Enterprise Technology Solutions</p>
+                        <p>Led infrastructure modernization initiatives, implementing automated deployment pipelines and network segmentation strategies. Designed and deployed multi-region cloud architecture serving 10M+ daily requests with 99.99% uptime.</p>
+                        <ul class="experience-highlights">
+                            <li>Architected zero-trust network infrastructure reducing attack surface by 85%</li>
+                            <li>Built automated incident response system cutting MTTR from hours to minutes</li>
+                            <li>Implemented infrastructure-as-code practices across 200+ production services</li>
+                        </ul>
+                    </div>
+
+                    <div class="experience-item">
+                        <div class="experience-header">
+                            <h3>Network Security Engineer</h3>
+                            <span class="experience-date">2020 - 2022</span>
+                        </div>
+                        <p class="experience-company">CloudSec Systems</p>
+                        <p>Developed network automation tools and security monitoring systems for cloud-native environments. Specialized in BGP routing, firewall automation, and intrusion detection.</p>
+                        <ul class="experience-highlights">
+                            <li>Automated network configuration changes reducing human error by 95%</li>
+                            <li>Built real-time threat detection system processing 100K events/second</li>
+                            <li>Designed disaster recovery procedures tested quarterly</li>
+                        </ul>
+                    </div>
+
+                    <div class="experience-item">
+                        <div class="experience-header">
+                            <h3>DevOps Engineer</h3>
+                            <span class="experience-date">2018 - 2020</span>
+                        </div>
+                        <p class="experience-company">Digital Infrastructure Co.</p>
+                        <p>Focused on CI/CD pipeline optimization, container orchestration, and monitoring infrastructure. Worked extensively with Kubernetes, Prometheus, and Terraform.</p>
+                        <ul class="experience-highlights">
+                            <li>Reduced deployment time from 4 hours to 15 minutes</li>
+                            <li>Implemented comprehensive observability stack</li>
+                            <li>Mentored junior engineers on infrastructure best practices</li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section class="section" id="projects">
+            <div class="container">
+                <h2 class="section-title">Projects</h2>
+                <div class="section-content">
+                    
+                    <div class="project-item">
+                        <h3>Multi-Region Service Mesh</h3>
+                        <div class="project-block">
+                            <h4>Problem</h4>
+                            <p>Existing microservices architecture suffered from inconsistent network policies, difficult observability, and complex service-to-service authentication across three geographic regions.</p>
+                        </div>
+                        <div class="project-block">
+                            <h4>Build</h4>
+                            <p>Implemented Istio-based service mesh with mTLS, distributed tracing, and automated traffic management. Built custom operators for policy enforcement and GitOps-driven configuration.</p>
+                        </div>
+                        <div class="project-block">
+                            <h4>Outcome</h4>
+                            <p>Reduced inter-service latency by 40%, achieved 100% mTLS coverage, and enabled real-time traffic shifting for zero-downtime deployments. Enhanced security posture while improving developer productivity.</p>
+                        </div>
+                    </div>
+
+                    <div class="project-item">
+                        <h3>Automated Network Change Management</h3>
+                        <div class="project-block">
+                            <h4>Problem</h4>
+                            <p>Manual network configuration changes led to frequent outages, slow rollout times, and lack of audit trails. Change validation was inconsistent and rollback procedures were unreliable.</p>
+                        </div>
+                        <div class="project-block">
+                            <h4>Build</h4>
+                            <p>Developed Python-based automation framework integrating with Ansible, Netbox, and CI/CD pipelines. Implemented pre-flight validation, automated testing, and one-click rollback capabilities.</p>
+                        </div>
+                        <div class="project-block">
+                            <h4>Outcome</h4>
+                            <p>Eliminated manual configuration errors, reduced change deployment time by 75%, and provided complete audit history. Enabled network team to safely implement 10x more changes per quarter.</p>
+                        </div>
+                    </div>
+
+                    <div class="project-item">
+                        <h3>Kubernetes Security Hardening Platform</h3>
+                        <div class="project-block">
+                            <h4>Problem</h4>
+                            <p>Default Kubernetes deployments exposed multiple security vulnerabilities. Teams lacked tooling to enforce security policies consistently across clusters.</p>
+                        </div>
+                        <div class="project-block">
+                            <h4>Build</h4>
+                            <p>Created admission controller enforcing security best practices, vulnerability scanning pipeline, and runtime protection system. Integrated with OPA for policy-as-code enforcement.</p>
+                        </div>
+                        <div class="project-block">
+                            <h4>Outcome</h4>
+                            <p>Prevented deployment of vulnerable images, enforced least-privilege access patterns, and detected runtime anomalies. Passed external security audit with zero critical findings.</p>
+                        </div>
+                    </div>
+
+                    <div class="project-item">
+                        <h3>Infrastructure Observability Stack</h3>
+                        <div class="project-block">
+                            <h4>Problem</h4>
+                            <p>Fragmented monitoring tools provided incomplete visibility into system health. Mean time to detection for critical issues was unacceptably high.</p>
+                        </div>
+                        <div class="project-block">
+                            <h4>Build</h4>
+                            <p>Deployed unified observability platform using Prometheus, Grafana, and Loki. Built custom exporters for network devices and legacy systems. Implemented SLO-based alerting.</p>
+                        </div>
+                        <div class="project-block">
+                            <h4>Outcome</h4>
+                            <p>Reduced MTTD by 80%, established SLI/SLO framework across all services, and created runbooks triggered by intelligent alerting. Improved on-call experience significantly.</p>
+                        </div>
+                    </div>
+
+                    <div class="project-item">
+                        <h3>Disaster Recovery Automation</h3>
+                        <div class="project-block">
+                            <h4>Problem</h4>
+                            <p>DR procedures existed only as documentation, were never tested comprehensively, and required extensive manual coordination during actual incidents.</p>
+                        </div>
+                        <div class="project-block">
+                            <h4>Build</h4>
+                            <p>Engineered automated failover system with continuous DR testing, automated backup validation, and orchestrated recovery workflows. Built simulation framework for regular testing.</p>
+                        </div>
+                        <div class="project-block">
+                            <h4>Outcome</h4>
+                            <p>Achieved RTO of under 15 minutes for critical systems, validated recovery procedures monthly, and maintained RPO of under 5 minutes. Successfully executed actual failover with zero data loss.</p>
+                        </div>
+                    </div>
+
+                    <div class="project-item">
+                        <h3>AI Infrastructure Platform</h3>
+                        <div class="project-block">
+                            <h4>Problem</h4>
+                            <p>ML teams struggled with GPU resource allocation, model deployment consistency, and experiment tracking. Infrastructure costs were unpredictable and often excessive.</p>
+                        </div>
+                        <div class="project-block">
+                            <h4>Build</h4>
+                            <p>Built self-service ML platform on Kubernetes with GPU sharing, automated model serving, and integrated experiment tracking. Implemented cost optimization strategies and resource quotas.</p>
+                        </div>
+                        <div class="project-block">
+                            <h4>Outcome</h4>
+                            <p>Reduced GPU costs by 60% through better utilization, accelerated model deployment from weeks to hours, and enabled data scientists to focus on ML rather than infrastructure.</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Education Section -->
+        <section class="section" id="education">
+            <div class="container">
+                <h2 class="section-title">Education</h2>
+                <div class="section-content">
+                    
+                    <div class="education-item">
+                        <div class="education-header">
+                            <h3>Bachelor of Science in Computer Science</h3>
+                            <span class="education-date">2014 - 2018</span>
+                        </div>
+                        <p class="education-institution">University of Technology</p>
+                        <p>Specialized in Computer Networks and Systems Security. Thesis on automated network intrusion detection using machine learning.</p>
+                    </div>
+
+                    <div class="education-item">
+                        <h3 class="certification-title">Certifications</h3>
+                        <ul class="certification-list">
+                            <li>Certified Kubernetes Security Specialist (CKS)</li>
+                            <li>AWS Certified Solutions Architect - Professional</li>
+                            <li>Cisco Certified Network Professional (CCNP)</li>
+                            <li>Certified Information Systems Security Professional (CISSP)</li>
+                            <li>HashiCorp Certified: Terraform Associate</li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section class="section" id="skills">
+            <div class="container">
+                <h2 class="section-title">Skills</h2>
+                <div class="section-content">
+                    
+                    <div class="skills-category">
+                        <h3>Infrastructure & Cloud</h3>
+                        <p>Kubernetes, Docker, Terraform, AWS, GCP, Azure, VMware, OpenStack</p>
+                    </div>
+
+                    <div class="skills-category">
+                        <h3>Networking</h3>
+                        <p>BGP, OSPF, VPN, Load Balancing, DNS, Service Mesh, SDN, Network Automation</p>
+                    </div>
+
+                    <div class="skills-category">
+                        <h3>Security</h3>
+                        <p>Zero Trust Architecture, mTLS, PKI, SIEM, IDS/IPS, Vulnerability Management, Security Automation</p>
+                    </div>
+
+                    <div class="skills-category">
+                        <h3>Observability</h3>
+                        <p>Prometheus, Grafana, ELK Stack, Jaeger, OpenTelemetry, DataDog, New Relic</p>
+                    </div>
+
+                    <div class="skills-category">
+                        <h3>Automation & IaC</h3>
+                        <p>Terraform, Ansible, Python, Bash, Go, GitOps, ArgoCD, Flux</p>
+                    </div>
+
+                    <div class="skills-category">
+                        <h3>Databases & Storage</h3>
+                        <p>PostgreSQL, MySQL, Redis, Elasticsearch, Ceph, NFS, Object Storage</p>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section class="section" id="contact">
+            <div class="container">
+                <h2 class="section-title">Contact</h2>
+                <div class="section-content contact-content">
+                    <p>I'm always interested in discussing infrastructure challenges, security architecture, or potential collaboration opportunities.</p>
+                    
+                    <div class="contact-links">
+                        <a href="mailto:rishabh@example.com" class="contact-link">
+                            <span class="contact-label">Email</span>
+                            <span class="contact-value">rishabh@example.com</span>
+                        </a>
+                        <a href="https://github.com/rootuser39" class="contact-link" target="_blank" rel="noopener noreferrer">
+                            <span class="contact-label">GitHub</span>
+                            <span class="contact-value">github.com/rootuser39</span>
+                        </a>
+                        <a href="https://linkedin.com/in/rishabhdurugkar" class="contact-link" target="_blank" rel="noopener noreferrer">
+                            <span class="contact-label">LinkedIn</span>
+                            <span class="contact-value">linkedin.com/in/rishabhdurugkar</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Rishabh Durugkar. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+</body>
+</html>
