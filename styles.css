@@ -631,6 +631,323 @@ footer p {
     }
 }
 
+/* Mission Replay Section */
+.mission-replay {
+    padding: 80px 0;
+    border-top: 1px solid var(--border);
+    position: relative;
+    z-index: 1;
+}
+
+.mission-controls {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+}
+
+.mission-btn {
+    padding: 10px 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.mission-btn:hover,
+.mission-btn:focus {
+    background: rgba(18, 20, 23, 0.95);
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-1px);
+}
+
+.mission-btn:active {
+    transform: translateY(0);
+}
+
+.mission-indicator {
+    font-size: 0.875rem;
+    color: var(--muted);
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    padding: 0 4px;
+}
+
+.mission-current {
+    color: var(--text);
+    font-weight: 600;
+}
+
+.mission-scrubber {
+    flex: 1;
+    min-width: 120px;
+    max-width: 300px;
+    height: 4px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: var(--border);
+    border-radius: 2px;
+    outline: none;
+    cursor: pointer;
+}
+
+.mission-scrubber::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    background: var(--text);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.mission-scrubber::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    background: var(--text);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.mission-scrubber:hover::-webkit-slider-thumb,
+.mission-scrubber:focus::-webkit-slider-thumb {
+    background: var(--highlight);
+    transform: scale(1.2);
+}
+
+.mission-scrubber:hover::-moz-range-thumb,
+.mission-scrubber:focus::-moz-range-thumb {
+    background: var(--highlight);
+    transform: scale(1.2);
+}
+
+.mission-autoplay-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.mission-autoplay-toggle {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    accent-color: var(--text);
+}
+
+.mission-autoplay-label {
+    font-size: 0.875rem;
+    color: var(--muted);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Mission Deck */
+.mission-deck {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 24px;
+    padding: 8px 0;
+    margin-bottom: 24px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Firefox */
+}
+
+.mission-deck::-webkit-scrollbar {
+    display: none; /* Chrome, Safari */
+}
+
+.mission-deck:focus {
+    outline: 2px solid rgba(255, 255, 255, 0.2);
+    outline-offset: 4px;
+    border-radius: 8px;
+}
+
+/* Mission Card */
+.mission-card {
+    flex: 0 0 100%;
+    scroll-snap-align: start;
+    background: var(--surface);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 32px;
+    position: relative;
+    overflow: hidden;
+}
+
+.mission-card.active .mission-replay-effect {
+    animation: scanline 4s ease-in-out forwards;
+}
+
+.mission-replay-effect {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+    opacity: 0;
+}
+
+@keyframes scanline {
+    0% {
+        top: 0;
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        top: 100%;
+        opacity: 0;
+    }
+}
+
+.mission-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 24px;
+    letter-spacing: -0.01em;
+}
+
+.mission-detail {
+    margin-bottom: 20px;
+}
+
+.mission-label {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--highlight);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 6px;
+    font-weight: 600;
+}
+
+.mission-detail p {
+    font-size: 0.95rem;
+    color: var(--muted);
+    line-height: 1.6;
+}
+
+.mission-stack {
+    font-size: 0.875rem;
+    color: var(--muted);
+    margin-top: 24px;
+    margin-bottom: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+}
+
+.mission-links {
+    display: flex;
+    gap: 12px;
+}
+
+.mission-link {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 16px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text);
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.mission-link:hover,
+.mission-link:focus {
+    border-color: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* Mission Log */
+.mission-log {
+    font-family: 'Courier New', monospace;
+    font-size: 0.85rem;
+    color: var(--muted);
+    padding: 12px 16px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    letter-spacing: 0.02em;
+}
+
+.mission-log-label {
+    color: var(--highlight);
+    font-weight: 600;
+    margin-right: 8px;
+}
+
+/* Responsive */
+@media (min-width: 640px) {
+    .mission-card {
+        flex: 0 0 calc(100% - 40px);
+    }
+}
+
+@media (min-width: 1024px) {
+    .mission-card {
+        flex: 0 0 calc(50% - 12px);
+        max-width: 600px;
+    }
+}
+
+@media (max-width: 640px) {
+    .mission-controls {
+        gap: 12px;
+    }
+    
+    .mission-btn {
+        padding: 8px 16px;
+        font-size: 0.8125rem;
+    }
+    
+    .mission-scrubber {
+        flex: 1 1 100%;
+        max-width: 100%;
+        order: 5;
+    }
+    
+    .mission-indicator {
+        order: 3;
+    }
+    
+    .mission-autoplay-wrapper {
+        order: 4;
+    }
+    
+    .mission-card {
+        padding: 24px;
+    }
+    
+    .mission-title {
+        font-size: 1.25rem;
+    }
+}
+
 /* Accessibility */
 :focus-visible {
     outline: 2px solid rgba(255, 255, 255, 0.4);
@@ -645,6 +962,15 @@ footer p {
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
         scroll-behavior: auto !important;
+    }
+    
+    .mission-card.active .mission-replay-effect {
+        animation: none !important;
+        opacity: 0 !important;
+    }
+    
+    html {
+        scroll-behavior: auto;
     }
 }
 
