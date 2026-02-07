@@ -59,6 +59,172 @@
             </div>
         </section>
 
+        <!-- Mission Replay Section -->
+        <section class="mission-replay" id="mission-replay">
+            <div class="container">
+                <h2 class="section-title">Mission Replay</h2>
+                
+                <!-- Controls -->
+                <div class="mission-controls">
+                    <button class="mission-btn mission-prev" aria-label="Previous mission">Prev</button>
+                    <button class="mission-btn mission-next" aria-label="Next mission">Next</button>
+                    <span class="mission-indicator" aria-live="polite"><span class="mission-current">01</span> / 06</span>
+                    <input type="range" class="mission-scrubber" min="0" max="5" value="0" step="1" aria-label="Mission scrubber">
+                    <label class="mission-autoplay-wrapper">
+                        <input type="checkbox" class="mission-autoplay-toggle" id="autoplay-toggle">
+                        <span class="mission-autoplay-label">Autoplay</span>
+                    </label>
+                </div>
+                
+                <!-- Deck -->
+                <div class="mission-deck" tabindex="0" role="region" aria-label="Mission deck">
+                    <!-- Mission 1 -->
+                    <div class="mission-card">
+                        <div class="mission-replay-effect"></div>
+                        <h3 class="mission-title">Multi-Region Service Mesh</h3>
+                        <div class="mission-detail">
+                            <span class="mission-label">Problem</span>
+                            <p>Existing microservices architecture suffered from inconsistent network policies, difficult observability, and complex service-to-service authentication across three geographic regions.</p>
+                        </div>
+                        <div class="mission-detail">
+                            <span class="mission-label">Build</span>
+                            <p>Implemented Istio-based service mesh with mTLS, distributed tracing, and automated traffic management. Built custom operators for policy enforcement and GitOps-driven configuration.</p>
+                        </div>
+                        <div class="mission-detail">
+                            <span class="mission-label">Outcome</span>
+                            <p>Enhanced security posture while improving developer productivity. Enabled real-time traffic shifting for zero-downtime deployments.</p>
+                        </div>
+                        <div class="mission-stack">Istio · Kubernetes · mTLS · GitOps</div>
+                        <div class="mission-links">
+                            <a href="#" class="mission-link">Repo</a>
+                            <a href="#" class="mission-link">Demo</a>
+                        </div>
+                    </div>
+                    
+                    <!-- Mission 2 -->
+                    <div class="mission-card">
+                        <div class="mission-replay-effect"></div>
+                        <h3 class="mission-title">Automated Network Change Management</h3>
+                        <div class="mission-detail">
+                            <span class="mission-label">Problem</span>
+                            <p>Manual network configuration changes led to frequent outages, slow rollout times, and lack of audit trails. Change validation was inconsistent and rollback procedures were unreliable.</p>
+                        </div>
+                        <div class="mission-detail">
+                            <span class="mission-label">Build</span>
+                            <p>Developed Python-based automation framework integrating with Ansible, Netbox, and CI/CD pipelines. Implemented pre-flight validation, automated testing, and one-click rollback capabilities.</p>
+                        </div>
+                        <div class="mission-detail">
+                            <span class="mission-label">Outcome</span>
+                            <p>Eliminated manual configuration errors, provided complete audit history. Enabled network team to safely implement 10x more changes per quarter.</p>
+                        </div>
+                        <div class="mission-stack">Python · Ansible · Netbox · CI/CD</div>
+                        <div class="mission-links">
+                            <a href="#" class="mission-link">Repo</a>
+                            <a href="#" class="mission-link">Demo</a>
+                        </div>
+                    </div>
+                    
+                    <!-- Mission 3 -->
+                    <div class="mission-card">
+                        <div class="mission-replay-effect"></div>
+                        <h3 class="mission-title">Kubernetes Security Hardening Platform</h3>
+                        <div class="mission-detail">
+                            <span class="mission-label">Problem</span>
+                            <p>Default Kubernetes deployments exposed multiple security vulnerabilities. Teams lacked tooling to enforce security policies consistently across clusters.</p>
+                        </div>
+                        <div class="mission-detail">
+                            <span class="mission-label">Build</span>
+                            <p>Created admission controller enforcing security best practices, vulnerability scanning pipeline, and runtime protection system. Integrated with OPA for policy-as-code enforcement.</p>
+                        </div>
+                        <div class="mission-detail">
+                            <span class="mission-label">Outcome</span>
+                            <p>Prevented deployment of vulnerable images, enforced least-privilege access patterns, and detected runtime anomalies. Passed external security audit with zero critical findings.</p>
+                        </div>
+                        <div class="mission-stack">Kubernetes · OPA · Security · Admission Control</div>
+                        <div class="mission-links">
+                            <a href="#" class="mission-link">Repo</a>
+                            <a href="#" class="mission-link">Demo</a>
+                        </div>
+                    </div>
+                    
+                    <!-- Mission 4 -->
+                    <div class="mission-card">
+                        <div class="mission-replay-effect"></div>
+                        <h3 class="mission-title">Infrastructure Observability Stack</h3>
+                        <div class="mission-detail">
+                            <span class="mission-label">Problem</span>
+                            <p>Fragmented monitoring tools provided incomplete visibility into system health. Mean time to detection for critical issues was unacceptably high.</p>
+                        </div>
+                        <div class="mission-detail">
+                            <span class="mission-label">Build</span>
+                            <p>Deployed unified observability platform using Prometheus, Grafana, and Loki. Built custom exporters for network devices and legacy systems. Implemented SLO-based alerting.</p>
+                        </div>
+                        <div class="mission-detail">
+                            <span class="mission-label">Outcome</span>
+                            <p>Established SLI/SLO framework across all services, and created runbooks triggered by intelligent alerting. Improved on-call experience significantly.</p>
+                        </div>
+                        <div class="mission-stack">Prometheus · Grafana · Loki · SLO</div>
+                        <div class="mission-links">
+                            <a href="#" class="mission-link">Repo</a>
+                            <a href="#" class="mission-link">Demo</a>
+                        </div>
+                    </div>
+                    
+                    <!-- Mission 5 -->
+                    <div class="mission-card">
+                        <div class="mission-replay-effect"></div>
+                        <h3 class="mission-title">Disaster Recovery Automation</h3>
+                        <div class="mission-detail">
+                            <span class="mission-label">Problem</span>
+                            <p>DR procedures existed only as documentation, were never tested comprehensively, and required extensive manual coordination during actual incidents.</p>
+                        </div>
+                        <div class="mission-detail">
+                            <span class="mission-label">Build</span>
+                            <p>Engineered automated failover system with continuous DR testing, automated backup validation, and orchestrated recovery workflows. Built simulation framework for regular testing.</p>
+                        </div>
+                        <div class="mission-detail">
+                            <span class="mission-label">Outcome</span>
+                            <p>Validated recovery procedures monthly, and maintained RPO of under 5 minutes. Successfully executed actual failover with zero data loss.</p>
+                        </div>
+                        <div class="mission-stack">Automation · DR · Failover · Testing</div>
+                        <div class="mission-links">
+                            <a href="#" class="mission-link">Repo</a>
+                            <a href="#" class="mission-link">Demo</a>
+                        </div>
+                    </div>
+                    
+                    <!-- Mission 6 -->
+                    <div class="mission-card">
+                        <div class="mission-replay-effect"></div>
+                        <h3 class="mission-title">AI Infrastructure Platform</h3>
+                        <div class="mission-detail">
+                            <span class="mission-label">Problem</span>
+                            <p>ML teams struggled with GPU resource allocation, model deployment consistency, and experiment tracking. Infrastructure costs were unpredictable and often excessive.</p>
+                        </div>
+                        <div class="mission-detail">
+                            <span class="mission-label">Build</span>
+                            <p>Built self-service ML platform on Kubernetes with GPU sharing, automated model serving, and integrated experiment tracking. Implemented cost optimization strategies and resource quotas.</p>
+                        </div>
+                        <div class="mission-detail">
+                            <span class="mission-label">Outcome</span>
+                            <p>Accelerated model deployment from weeks to hours, and enabled data scientists to focus on ML rather than infrastructure. Improved GPU utilization significantly.</p>
+                        </div>
+                        <div class="mission-stack">Kubernetes · GPU · ML Platform · Cost Optimization</div>
+                        <div class="mission-links">
+                            <a href="#" class="mission-link">Repo</a>
+                            <a href="#" class="mission-link">Demo</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- System Log -->
+                <div class="mission-log" aria-live="polite" aria-atomic="true">
+                    <span class="mission-log-label">SYSTEM LOG:</span>
+                    <span class="mission-log-text">Loaded mission 01 — Multi-region service mesh with enhanced security.</span>
+                </div>
+            </div>
+        </section>
+
         <!-- About Section -->
         <section class="section" id="about">
             <div class="container">
