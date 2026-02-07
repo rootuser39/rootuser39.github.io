@@ -310,11 +310,12 @@ if (missionDeck && missionCards.length > 0) {
             if (entry.isIntersecting) {
                 const index = Array.from(missionCards).indexOf(entry.target);
                 if (index !== -1 && index !== currentSlide) {
+                    // Update slide without scrolling (IntersectionObserver already handled scroll)
                     currentSlide = index;
                     currentIndicator.textContent = String(currentSlide + 1).padStart(2, '0');
                     scrubber.value = currentSlide;
                     
-                    // Update active class
+                    // Update active class for replay effect
                     missionCards.forEach((c, i) => {
                         if (i === currentSlide) {
                             c.classList.add('active');
