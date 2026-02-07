@@ -756,18 +756,13 @@ footer p {
 
 /* Mission Deck */
 .mission-deck {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 24px;
     padding: 8px 0;
     margin-bottom: 24px;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none; /* Firefox */
-}
-
-.mission-deck::-webkit-scrollbar {
-    display: none; /* Chrome, Safari */
+    position: relative;
+    min-height: 500px;
 }
 
 .mission-deck:focus {
@@ -778,16 +773,33 @@ footer p {
 
 /* Mission Card */
 .mission-card {
-    flex: 0 0 100%;
-    scroll-snap-align: start;
     background: var(--surface);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border: 1.5px solid var(--border);
     border-radius: 12px;
     padding: 32px;
-    position: relative;
+    position: absolute;
     overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0;
+    pointer-events: none;
+    width: calc(50% - 12px);
+}
+
+.mission-card.active {
+    opacity: 1;
+    pointer-events: auto;
+    left: 0;
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+}
+
+.mission-card.next-preview {
+    opacity: 0.4;
+    pointer-events: none;
+    right: 0;
+    filter: blur(1px);
 }
 
 .mission-card.active .mission-replay-effect {
@@ -903,15 +915,18 @@ footer p {
 
 /* Responsive */
 @media (min-width: 640px) {
-    .mission-card {
-        flex: 0 0 calc(100% - 40px);
+    .mission-deck {
+        min-height: 520px;
     }
 }
 
 @media (min-width: 1024px) {
+    .mission-deck {
+        min-height: 500px;
+    }
+    
     .mission-card {
-        flex: 0 0 calc(50% - 12px);
-        max-width: 600px;
+        max-width: 580px;
     }
 }
 
@@ -939,8 +954,23 @@ footer p {
         order: 4;
     }
     
+    .mission-deck {
+        grid-template-columns: 1fr;
+        min-height: 450px;
+    }
+    
     .mission-card {
+        width: 100%;
         padding: 24px;
+    }
+    
+    .mission-card.active {
+        position: relative;
+        left: auto;
+    }
+    
+    .mission-card.next-preview {
+        display: none;
     }
     
     .mission-title {
@@ -962,6 +992,10 @@ footer p {
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
         scroll-behavior: auto !important;
+    }
+    
+    .mission-card {
+        transition-duration: 0.01ms !important;
     }
     
     .mission-card.active .mission-replay-effect {
