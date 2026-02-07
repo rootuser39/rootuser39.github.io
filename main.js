@@ -168,23 +168,14 @@ function updateActiveSlide(index) {
     // Update scrubber
     scrubber.value = currentSlide;
     
-    // Scroll to card
-    const card = missionCards[currentSlide];
-    if (card && missionDeck) {
-        const scrollBehavior = prefersReducedMotion ? 'auto' : 'smooth';
-        card.scrollIntoView({ 
-            behavior: scrollBehavior, 
-            block: 'nearest', 
-            inline: 'start' 
-        });
-    }
-    
-    // Update active class for replay effect
-    missionCards.forEach((c, i) => {
+    // Update card classes for dual-view
+    missionCards.forEach((card, i) => {
+        card.classList.remove('active', 'next-preview');
+        
         if (i === currentSlide) {
-            c.classList.add('active');
-        } else {
-            c.classList.remove('active');
+            card.classList.add('active');
+        } else if (i === currentSlide + 1) {
+            card.classList.add('next-preview');
         }
     });
     
@@ -298,43 +289,34 @@ if (missionDeck) {
     });
 }
 
-// IntersectionObserver for active slide tracking
-if (missionDeck && missionCards.length > 0) {
-    const observerOptions = {
-        root: missionDeck,
-        threshold: 0.5
-    };
+// Touch swipe support for mobile
+let touchStartX = 0;
+let touchEndX = 0;
+
+if (missionDeck) {
+    missionDeck.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].clientX;
+    });
     
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const index = Array.from(missionCards).indexOf(entry.target);
-                if (index !== -1 && index !== currentSlide) {
-                    // Update slide without scrolling (IntersectionObserver already handled scroll)
-                    currentSlide = index;
-                    currentIndicator.textContent = String(currentSlide + 1).padStart(2, '0');
-                    scrubber.value = currentSlide;
-                    
-                    // Update active class for replay effect
-                    missionCards.forEach((c, i) => {
-                        if (i === currentSlide) {
-                            c.classList.add('active');
-                        } else {
-                            c.classList.remove('active');
-                        }
-                    });
-                    
-                    // Update system log
-                    if (missionLogText) {
-                        missionLogText.textContent = `Loaded mission ${String(currentSlide + 1).padStart(2, '0')} — ${missionTitles[currentSlide]}.`;
-                    }
-                }
-            }
-        });
-    }, observerOptions);
-    
-    missionCards.forEach(card => observer.observe(card));
-    
-    // Initialize first slide as active
+    missionDeck.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].clientX;
+        handleSwipe();
+    });
+}
+
+function handleSwipe() {
+    const swipeThreshold = 50;
+    if (touchEndX < touchStartX - swipeThreshold) {
+        // Swiped left - go to next
+        goToNextSlide();
+    }
+    if (touchEndX > touchStartX + swipeThreshold) {
+        // Swiped right - go to previous
+        goToPrevSlide();
+    }
+}
+
+// Initialize first slide as active
+if (missionCards.length > 0) {
     updateActiveSlide(0);
 }
