@@ -916,7 +916,7 @@ footer p {
 /* Responsive */
 @media (min-width: 640px) {
     .mission-deck {
-        min-height: 520px;
+        min-height: 500px;
     }
 }
 
