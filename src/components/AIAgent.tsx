@@ -1,58 +1,147 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAgent } from '@/lib/agent/context';
-import { processQuery, suggestedPrompts, type AgentMessage } from '@/lib/agent';
+import { processQuery, suggestedPrompts } from '@/lib/agent';
+import { projects } from '@/lib/knowledge';
+import type { AgentMessage, AgentResponse } from '@/lib/agent';
 
 // ── Markdown-lite renderer ───────────────────────────────────────────────────
-// Handles **bold**, bullet lines (• or -), and line breaks.
+// Handles **bold**, bullet lines (• or -), and blank-line spacing.
 
 function renderContent(text: string) {
   const lines = text.split('\n');
   return lines.map((line, i) => {
     const isBullet = /^[•\-]\s/.test(line);
     const parts = line.split(/(\*\*[^*]+\*\*)/g);
-    const rendered = parts.map((part, j) => {
-      if (part.startsWith('**') && part.endsWith('**')) {
-        return (
-          <strong key={j} className="text-highlight font-semibold">
-            {part.slice(2, -2)}
-          </strong>
-        );
-      }
-      return part;
-    });
 
-    if (isBullet) {
-      const content = parts.map((part, j) => {
-        const trimmed = i === 0 && j === 0 ? part.replace(/^[•\-]\s/, '') : part;
-        if (trimmed.startsWith('**') && trimmed.endsWith('**')) {
+    const renderParts = (rawParts: string[], stripLeadingBullet = false) =>
+      rawParts.map((part, j) => {
+        const content = stripLeadingBullet && j === 0 ? part.replace(/^[•\-]\s/, '') : part;
+        if (content.startsWith('**') && content.endsWith('**')) {
           return (
             <strong key={j} className="text-highlight font-semibold">
-              {trimmed.slice(2, -2)}
+              {content.slice(2, -2)}
             </strong>
           );
         }
-        return trimmed.replace(/^[•\-]\s/, '');
+        return content.replace(/^[•\-]\s/, '');
       });
+
+    if (isBullet) {
       return (
         <div key={i} className="flex gap-1.5 items-start">
-          <span className="text-muted mt-0.5 shrink-0">›</span>
-          <span>{content}</span>
+          <span className="text-muted mt-0.5 shrink-0 select-none">›</span>
+          <span>{renderParts(parts, true)}</span>
         </div>
       );
     }
 
-    if (line === '') return <div key={i} className="h-2" />;
-    return <div key={i}>{rendered}</div>;
+    if (line === '') return <div key={i} className="h-1.5" />;
+    return <div key={i}>{renderParts(parts)}</div>;
   });
+}
+
+// ── Navigation CTA ───────────────────────────────────────────────────────────
+
+function NavigationCTA({
+  target,
+  onNavigate,
+}: {
+  target: string;
+  onNavigate: (t: string) => void;
+}) {
+  const labels: Record<string, string> = {
+    '/recruiter': 'Open Recruiter Mode',
+    '/projects': 'View Projects',
+    '/': 'Go Home',
+    '/timeline': 'View Timeline',
+    '/services': 'View Services',
+  };
+
+  const cleanLabel = () => {
+    if (labels[target]) return labels[target];
+    if (target.startsWith('/#')) {
+      const section = target.slice(2);
+      return `Jump to ${section.charAt(0).toUpperCase() + section.slice(1)}`;
+    }
+    return `Go to ${target}`;
+  };
+
+  return (
+    <button
+      onClick={() => onNavigate(target)}
+      className="mt-2 flex items-center gap-1.5 text-[10px] text-emerald-400 hover:text-emerald-300 transition-colors group"
+    >
+      <span className="group-hover:translate-x-0.5 transition-transform">→</span>
+      <span className="underline underline-offset-2 decoration-emerald-400/40 group-hover:decoration-emerald-300">
+        {cleanLabel()}
+      </span>
+    </button>
+  );
+}
+
+// ── Highlighted projects strip ───────────────────────────────────────────────
+
+function HighlightedProjects({
+  projectIds,
+  onSend,
+}: {
+  projectIds: string[];
+  onSend: (text: string) => void;
+}) {
+  const matched = projectIds
+    .map((id) => projects.find((p) => p.id === id))
+    .filter(Boolean) as typeof projects;
+
+  if (matched.length === 0) return null;
+
+  return (
+    <div className="mt-2 space-y-1.5">
+      {matched.map((p) => (
+        <div
+          key={p.id}
+          className="rounded-md border border-white/10 bg-white/[0.03] px-2.5 py-2"
+        >
+          <div className="text-[10px] font-semibold text-highlight leading-tight">{p.title}</div>
+          <div className="flex flex-wrap gap-1 mt-1">
+            {p.category.slice(0, 3).map((cat) => (
+              <span
+                key={cat}
+                className="text-[8px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-white/5 text-muted border border-white/10"
+              >
+                {cat}
+              </span>
+            ))}
+          </div>
+          <button
+            onClick={() => onSend(`Tell me more about ${p.title}`)}
+            className="mt-1.5 text-[9px] text-emerald-400 hover:text-emerald-300 transition-colors"
+          >
+            Tell me more →
+          </button>
+        </div>
+      ))}
+    </div>
+  );
 }
 
 // ── Message bubble ───────────────────────────────────────────────────────────
 
-function MessageBubble({ message }: { message: AgentMessage }) {
+function MessageBubble({
+  message,
+  onNavigate,
+  onSend,
+}: {
+  message: AgentMessage;
+  onNavigate: (target: string) => void;
+  onSend: (text: string) => void;
+}) {
   const isUser = message.role === 'user';
+  const resp: AgentResponse | undefined = message.response;
+
   return (
     <div className={`flex ${isUser ? 'justify-end' : 'justify-start'} mb-3`}>
       {!isUser && (
@@ -70,7 +159,19 @@ function MessageBubble({ message }: { message: AgentMessage }) {
         {isUser ? (
           <span>{message.content}</span>
         ) : (
-          renderContent(message.content)
+          <>
+            {renderContent(message.content)}
+
+            {/* Inline project cards for highlighted projects */}
+            {resp?.highlightedProjects && resp.highlightedProjects.length > 0 && (
+              <HighlightedProjects projectIds={resp.highlightedProjects} onSend={onSend} />
+            )}
+
+            {/* Navigation CTA */}
+            {resp?.navigationTarget && (
+              <NavigationCTA target={resp.navigationTarget} onNavigate={onNavigate} />
+            )}
+          </>
         )}
       </div>
     </div>
@@ -103,27 +204,83 @@ function TypingIndicator() {
 // ── Main agent panel ──────────────────────────────────────────────────────────
 
 export function AIAgent() {
-  const { isOpen, isMinimized, openAgent, closeAgent, minimizeAgent, pendingPrompt, clearPendingPrompt } =
-    useAgent();
+  const router = useRouter();
+  const {
+    isOpen,
+    isMinimized,
+    openAgent,
+    closeAgent,
+    minimizeAgent,
+    pendingPrompt,
+    clearPendingPrompt,
+  } = useAgent();
 
   const [messages, setMessages] = useState<AgentMessage[]>([
     {
       id: 'welcome',
       role: 'assistant',
       content:
-        "Hello! I'm Rishabh's portfolio agent. I can answer questions about his experience, projects, certifications, and skills.\n\nWhat would you like to explore?",
+        "Hello! I'm Rishabh's portfolio agent. I can answer questions about his experience, projects, certifications, and skills — and adapt my answers for recruiters or engineers.\n\nWhat would you like to explore?",
       timestamp: new Date(),
     },
   ]);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
-  const [activeSuggestions, setActiveSuggestions] = useState<string[]>(suggestedPrompts.slice(0, 4));
+  const [activeSuggestions, setActiveSuggestions] = useState<string[]>(
+    suggestedPrompts.slice(0, 4),
+  );
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, []);
+
+  const handleSend = useCallback(async (text: string) => {
+    const trimmed = text.trim();
+    if (!trimmed) return;
+
+    const userMsg: AgentMessage = {
+      id: `u-${Date.now()}`,
+      role: 'user',
+      content: trimmed,
+      timestamp: new Date(),
+    };
+
+    setMessages((prev) => [...prev, userMsg]);
+    setInput('');
+    setIsTyping(true);
+    setActiveSuggestions([]);
+
+    // Simulate realistic async response delay (300–700 ms)
+    const delay = 300 + Math.random() * 400;
+    await new Promise((r) => setTimeout(r, delay));
+
+    // ── INTEGRATION SEAM ─────────────────────────────────────────────────────
+    // To connect a real LLM, replace this call with:
+    //   const response = await fetchAgentAPI(trimmed, messages);
+    // ─────────────────────────────────────────────────────────────────────────
+    const response = processQuery(trimmed);
+
+    const assistantMsg: AgentMessage = {
+      id: `a-${Date.now()}`,
+      role: 'assistant',
+      content: response.message,
+      timestamp: new Date(),
+      response, // stored for NavigationCTA + HighlightedProjects rendering
+    };
+
+    setIsTyping(false);
+    setMessages((prev) => [...prev, assistantMsg]);
+    setActiveSuggestions(response.suggestedPrompts ?? []);
+  }, []);
+
+  const handleNavigate = useCallback(
+    (target: string) => {
+      router.push(target);
+    },
+    [router],
+  );
 
   useEffect(() => {
     scrollToBottom();
@@ -141,49 +298,7 @@ export function AIAgent() {
       clearPendingPrompt();
       handleSend(pendingPrompt);
     }
-    // handleSend and clearPendingPrompt are intentionally omitted: handleSend is
-    // defined inline (re-created each render) and including it would cause an
-    // infinite loop; clearPendingPrompt is a stable useCallback from context.
-    // This effect must only re-run when pendingPrompt or isOpen changes.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pendingPrompt, isOpen]);
-
-  async function handleSend(text: string) {
-    const trimmed = text.trim();
-    if (!trimmed) return;
-
-    const userMsg: AgentMessage = {
-      id: `u-${Date.now()}`,
-      role: 'user',
-      content: trimmed,
-      timestamp: new Date(),
-    };
-
-    setMessages((prev) => [...prev, userMsg]);
-    setInput('');
-    setIsTyping(true);
-    setActiveSuggestions([]);
-
-    // Simulate a realistic async response delay (300-700ms)
-    const delay = 300 + Math.random() * 400;
-    await new Promise((r) => setTimeout(r, delay));
-
-    // INTEGRATION SEAM: replace processQuery with API call here
-    const response = processQuery(trimmed);
-
-    const assistantMsg: AgentMessage = {
-      id: `a-${Date.now()}`,
-      role: 'assistant',
-      content: response.content,
-      timestamp: new Date(),
-    };
-
-    setIsTyping(false);
-    setMessages((prev) => [...prev, assistantMsg]);
-    if (response.suggestions) {
-      setActiveSuggestions(response.suggestions);
-    }
-  }
+  }, [pendingPrompt, isOpen, clearPendingPrompt, handleSend]);
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -204,14 +319,29 @@ export function AIAgent() {
         title="Portfolio Agent"
       >
         {isOpen ? (
-          <svg className="w-4 h-4 text-muted group-hover:text-highlight transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg
+            className="w-4 h-4 text-muted group-hover:text-highlight transition-colors"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
           </svg>
         ) : (
           <span className="relative flex items-center justify-center">
             <span className="absolute w-2 h-2 rounded-full bg-emerald-400 animate-ping opacity-60" />
-            <svg className="w-4.5 h-4.5 text-emerald-400 relative" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+            <svg
+              className="w-4.5 h-4.5 text-emerald-400 relative"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={1.5}
+                d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+              />
             </svg>
           </span>
         )}
@@ -231,13 +361,15 @@ export function AIAgent() {
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ duration: 0.2, ease: 'easeOut' }}
             className="fixed bottom-36 right-4 z-50 w-80 sm:w-96 glass rounded-xl overflow-hidden border border-white/10 shadow-2xl"
-            style={{ maxHeight: isMinimized ? 52 : 520 }}
+            style={{ maxHeight: isMinimized ? 52 : 540 }}
           >
             {/* Header */}
             <div className="flex items-center justify-between px-4 py-3 border-b border-white/10">
               <div className="flex items-center gap-2">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                <span className="text-xs font-mono font-semibold text-highlight tracking-wider">PORTFOLIO AGENT</span>
+                <span className="text-xs font-mono font-semibold text-highlight tracking-wider">
+                  PORTFOLIO AGENT
+                </span>
               </div>
               <div className="flex items-center gap-1">
                 <button
@@ -264,9 +396,14 @@ export function AIAgent() {
             {!isMinimized && (
               <>
                 {/* Messages */}
-                <div className="overflow-y-auto px-4 py-3" style={{ maxHeight: 300 }}>
+                <div className="overflow-y-auto px-4 py-3" style={{ maxHeight: 320 }}>
                   {messages.map((msg) => (
-                    <MessageBubble key={msg.id} message={msg} />
+                    <MessageBubble
+                      key={msg.id}
+                      message={msg}
+                      onNavigate={handleNavigate}
+                      onSend={handleSend}
+                    />
                   ))}
                   {isTyping && <TypingIndicator />}
                   <div ref={messagesEndRef} />
@@ -306,7 +443,12 @@ export function AIAgent() {
                       aria-label="Send"
                     >
                       <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M14 5l7 7m0 0l-7 7m7-7H3"
+                        />
                       </svg>
                     </button>
                   </div>
