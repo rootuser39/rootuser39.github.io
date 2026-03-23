@@ -11,7 +11,7 @@ import type { KnowledgeProject, KnowledgeCertification } from '@/lib/knowledge';
 
 // ── Domain label helpers ─────────────────────────────────────────────────────
 
-const DOMAIN_LABELS: Record<string, string> = {
+export const DOMAIN_LABELS: Record<string, string> = {
   networking: 'Networking',
   automation: 'Automation',
   observability: 'Observability',
