@@ -53,4 +53,30 @@ body {
     -webkit-backdrop-filter: blur(8px);
     border: 1px solid var(--border);
   }
+
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* Scrollbar styling for agent panel and command palette */
+.overflow-y-auto::-webkit-scrollbar {
+  width: 4px;
+}
+.overflow-y-auto::-webkit-scrollbar-track {
+  background: transparent;
+}
+.overflow-y-auto::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 2px;
+}
+.overflow-y-auto::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+/* Reduced motion: suppress Framer Motion */
+@media (prefers-reduced-motion: reduce) {
+  .motion-safe\:animate-none {
+    animation: none !important;
+  }
 }
