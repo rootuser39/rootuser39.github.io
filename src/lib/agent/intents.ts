@@ -186,21 +186,12 @@ const RULES: IntentRule[] = [
 // ── Detector ──────────────────────────────────────────────────────────────────
 
 /**
- * Minimum accumulated score required for an intent to beat 'fallback'.
- * A threshold of 2 means a single weight-1 pattern can never win alone —
- * at least one weight-2 hit (or two weight-1 hits) is required, preventing
- * accidental routing on tangential keyword matches.
- */
-const MIN_CONFIDENCE = 2;
-
-/**
  * Returns the best-matching intent for a query using weighted pattern scoring.
- * Falls back to 'fallback' when no rule accumulates a score >= MIN_CONFIDENCE.
+ * Falls back to 'fallback' when no rule accumulates a score above 0.
  */
 export function detectIntent(query: string): Intent {
   let bestIntent: Intent = 'fallback';
-  // Start one below the threshold so only scores >= MIN_CONFIDENCE can win.
-  let bestScore = MIN_CONFIDENCE - 1;
+  let bestScore = 0;
 
   for (const rule of RULES) {
     const score = rule.patterns.reduce(

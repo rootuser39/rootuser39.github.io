@@ -10,20 +10,16 @@ import type { EntityMap, RoleType, DomainTag } from './types';
 
 /**
  * Returns the titles of knowledge-base projects whose significant words
- * (length > 3) appear in the query. Uses a word-overlap heuristic with
- * a ratio-aware threshold so that partial references like "pipeline project"
- * or "observability stack" still resolve correctly for short-title projects.
+ * (length > 3) appear in the query. Uses a simple word-overlap heuristic.
  */
 function extractProjectNames(q: string): string[] {
   const qWords = new Set(q.split(/\s+/).filter((w) => w.length > 3));
   return projects
     .filter((p) => {
       const pWords = p.title.toLowerCase().split(/\s+/).filter((w) => w.length > 3);
-      if (pWords.length === 0) return false;
       const overlap = pWords.filter((w) => qWords.has(w)).length;
-      // Accept if 2+ words overlap, OR if ≥ half the title's significant words
-      // matched (handles short titles and partial references like "pipeline project").
-      return overlap >= 2 || (overlap >= 1 && overlap / pWords.length >= 0.5);
+      // Require at least 2 overlapping words to avoid false positives
+      return overlap >= 2;
     })
     .map((p) => p.title);
 }
@@ -66,11 +62,10 @@ function extractCertNames(q: string): string[] {
 /**
  * Infers the visitor's mindset from the phrasing of their query.
  * Explicit role declarations win; implicit signals (technical vocabulary,
- * summary requests) require 2+ matches to reduce false-positive role
- * assignment from incidental broad terms like "how does" or "summary".
+ * summary requests) are used as fallback inference.
  */
 function detectRoleType(query: string): RoleType {
-  // Explicit role declarations — single strong signal is enough
+  // Explicit role declarations
   if (/\b(i.?m a recruiter|as a recruiter|i.?m recruiting|i recruit|talent acquisition)\b/i.test(query)) {
     return 'recruiter';
   }
@@ -84,32 +79,13 @@ function detectRoleType(query: string): RoleType {
     return 'founder';
   }
 
-  // Implicit signals — require 2+ matching signals to reduce false positives.
-  // A lone "how does" or "summary" is too broad to reliably infer a role.
-  const techSignals = [
-    /\barchitecture\b/i,
-    /\bimplementation\b/i,
-    /\bhow does\b/i,
-    /\btechnical\b/i,
-    /\bdeep dive\b/i,
-    /\bstack\b/i,
-    /\bcodebase\b/i,
-    /\binternals\b/i,
-  ];
-  if (techSignals.filter((re) => re.test(query)).length >= 2) {
+  // Implicit signals — technical vocabulary → engineer mindset
+  if (/\b(architecture|implementation|how does|technical|deep dive|stack|codebase|internals)\b/i.test(query)) {
     return 'engineer';
   }
 
-  const recruiterSignals = [
-    /\bsummary\b/i,
-    /\bbrief\b/i,
-    /\bhighlight\b/i,
-    /\btldr\b|\btl\.dr\b/i,
-    /\bfor a recruiter\b/i,
-    /\bhire\b|\bhiring\b/i,
-    /\bcandidate\b/i,
-  ];
-  if (recruiterSignals.filter((re) => re.test(query)).length >= 2) {
+  // Implicit signals — summary/hiring vocabulary → recruiter mindset
+  if (/\b(summary|brief|highlight|tldr|tl.dr|for a recruiter|hire|hiring|candidate)\b/i.test(query)) {
     return 'recruiter';
   }
 
