@@ -3,6 +3,9 @@ import { Navigation } from "@/components/Navigation";
 import { BackToTop } from "@/components/BackToTop";
 import { Background } from "@/components/Background";
 import { PageTransition } from "@/components/PageTransition";
+import { AIAgent } from "@/components/AIAgent";
+import { CommandPalette } from "@/components/CommandPalette";
+import { AgentProvider } from "@/lib/agent/context";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -30,14 +33,18 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Background />
-        <Navigation />
-        <PageTransition>
-          <main className="min-h-screen">
-            {children}
-          </main>
-        </PageTransition>
-        <BackToTop />
+        <AgentProvider>
+          <Background />
+          <Navigation />
+          <PageTransition>
+            <main className="min-h-screen">
+              {children}
+            </main>
+          </PageTransition>
+          <BackToTop />
+          <AIAgent />
+          <CommandPalette />
+        </AgentProvider>
       </body>
     </html>
   );

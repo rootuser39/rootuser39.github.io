@@ -3,12 +3,14 @@
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
+import { useAgent } from '@/lib/agent/context';
 
 export function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
   const isHome = pathname === '/';
+  const { openAgent } = useAgent();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -28,12 +30,12 @@ export function Navigation() {
     { href: isHome ? '#about' : '/#about', label: 'About' },
     { href: isHome ? '#experience' : '/#experience', label: 'Experience' },
     { href: isHome ? '#projects' : '/#projects', label: 'Projects' },
-    { href: isHome ? '#education' : '/#education', label: 'Education' },
-    { href: isHome ? '#certifications' : '/#certifications', label: 'Certifications' },
+    { href: isHome ? '#certifications' : '/#certifications', label: 'Certs' },
     { href: isHome ? '#skills' : '/#skills', label: 'Skills' },
     { href: isHome ? '#contact' : '/#contact', label: 'Contact' },
     { href: '/services', label: 'Services' },
     { href: '/timeline', label: 'Timeline' },
+    { href: '/recruiter', label: 'Recruiter' },
   ];
 
   return (
@@ -52,16 +54,45 @@ export function Navigation() {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center space-x-6">
+          <div className="hidden lg:flex items-center space-x-5">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-sm text-muted hover:text-highlight transition-colors"
+                className={`text-sm transition-colors ${
+                  link.href === '/recruiter'
+                    ? 'text-emerald-400/70 hover:text-emerald-400'
+                    : 'text-muted hover:text-highlight'
+                }`}
               >
                 {link.label}
               </Link>
             ))}
+
+            {/* ⌘K button */}
+            <button
+              onClick={() => {
+                // Dispatch keyboard event to open palette
+                window.dispatchEvent(
+                  new KeyboardEvent('keydown', { key: 'k', metaKey: true, bubbles: true })
+                );
+              }}
+              className="flex items-center gap-1.5 text-xs text-muted/50 hover:text-muted transition-colors border border-white/10 rounded px-2 py-1 font-mono"
+              title="Open command palette"
+              aria-label="Open command palette (⌘K)"
+            >
+              <span>⌘K</span>
+            </button>
+
+            {/* Agent button */}
+            <button
+              onClick={() => openAgent()}
+              className="flex items-center gap-1.5 text-xs text-emerald-400/70 hover:text-emerald-400 transition-colors border border-emerald-500/20 hover:border-emerald-500/40 rounded px-2.5 py-1"
+              aria-label="Open portfolio agent"
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              Agent
+            </button>
           </div>
 
           {/* Mobile Hamburger */}
@@ -104,11 +135,22 @@ export function Navigation() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-sm text-muted hover:text-highlight transition-colors py-2"
+                  className={`text-sm transition-colors py-2 ${
+                    link.href === '/recruiter'
+                      ? 'text-emerald-400/70 hover:text-emerald-400'
+                      : 'text-muted hover:text-highlight'
+                  }`}
                 >
                   {link.label}
                 </Link>
               ))}
+              <button
+                onClick={() => { setIsOpen(false); openAgent(); }}
+                className="text-left text-sm text-emerald-400/70 hover:text-emerald-400 transition-colors py-2 flex items-center gap-2"
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                Open Agent
+              </button>
             </div>
           </div>
         )}
