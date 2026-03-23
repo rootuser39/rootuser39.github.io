@@ -129,13 +129,9 @@ const INTENT_PROMPTS: Partial<Record<Intent, string[]>> = {
  * Priority order:
  * 1. Specific project-based prompts (when a project was identified)
  * 2. Domain-specific prompts (when a domain was detected)
- * 3. Intent-based prompts (context-specific — takes priority over generic role chips)
- * 4. Role-specific prompts (generic role fallback when no intent map entry exists)
+ * 3. Role-specific prompts (when a role was inferred)
+ * 4. Intent-based prompts
  * 5. Generic fallback
- *
- * Intent is promoted above role because intent reflects *what the user just asked*,
- * while role is a softer inference that produces repetitive generic suggestions when
- * overriding specific cert/skill/experience prompts.
  */
 export function buildFollowUpPrompts(intent: Intent, entities: EntityMap): string[] {
   const { roleType, domains, projectNames } = entities;
@@ -165,16 +161,11 @@ export function buildFollowUpPrompts(intent: Intent, entities: EntityMap): strin
     return base.slice(0, 4);
   }
 
-  // 3. Intent-based follow-ups — preferred over role because they are specific
-  // to what the user just asked, reducing repetitive generic chips.
-  const intentPrompts = INTENT_PROMPTS[intent];
-  if (intentPrompts) return intentPrompts;
-
-  // 4. Role-specific follow-ups (fallback when no intent entry exists)
+  // 3. Role-specific follow-ups
   if (roleType !== 'unknown') {
     return ROLE_PROMPTS[roleType];
   }
 
-  // 5. Generic fallback
-  return FALLBACK_PROMPTS;
+  // 4. Intent-based follow-ups
+  return INTENT_PROMPTS[intent] ?? FALLBACK_PROMPTS;
 }

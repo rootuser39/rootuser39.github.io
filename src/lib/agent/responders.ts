@@ -20,7 +20,6 @@ import {
   findCertsForDomain,
   findCertsByRelevance,
   findSkillCategoriesForDomain,
-  DOMAIN_LABELS,
 } from '@/lib/knowledge/selectors';
 import { recommendProjectsForRole, buildFollowUpPrompts } from './recommender';
 import type { AgentResponse, EntityMap, Intent, DomainTag } from './types';
@@ -57,6 +56,17 @@ function uniqueProjects(list: typeof projects) {
     return true;
   });
 }
+
+// ── Domain label ──────────────────────────────────────────────────────────────
+
+const DOMAIN_LABELS: Record<DomainTag, string> = {
+  networking: 'Networking',
+  automation: 'Automation',
+  observability: 'Observability',
+  security: 'Security',
+  'ai-infrastructure': 'AI Infrastructure',
+  infrastructure: 'Infrastructure',
+};
 
 // ── Individual responders ─────────────────────────────────────────────────────
 
